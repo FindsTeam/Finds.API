@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 mongoose.Promise = Promise;
 
-var userSchema = new mongoose.Schema({
+var user = new mongoose.Schema({
     email: {
         type: String,
         unique: true,
@@ -11,11 +11,7 @@ var userSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true
-    },
-    img: {
-        type: String,
-        required: false
     }
 });
 
-module.exports = mongoose.model("users", userSchema);
+module.exports = mongoose.model("users", user);

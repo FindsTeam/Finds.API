@@ -1,6 +1,8 @@
-const models = require("../models");
-const loginRoute = require("./login");
+const express = require("express");
+const router = express.Router();
 
-module.exports = (app, dir) => {
-    loginRoute(app, models.User);
-};
+const ctrLogin = require("../controllers/users");
+
+router.get("/login/:email/:name", ctrLogin.login);
+
+module.exports = router;
