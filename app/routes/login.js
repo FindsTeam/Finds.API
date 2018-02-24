@@ -1,12 +1,11 @@
 module.exports = (app, model) => {
-    app.get("/login/:sub/:nickname/:name", (req, res) => {
+    app.get("/login/:email/:name/:img", (req, res) => {
         model.findOne({ sub: req.params.sub }, (err, item) => {
             if (item === null) {
                 var user = {
-                    sub: req.params.sub,
-                    nickname: req.params.nickname,
+                    email: req.params.email,
                     name: req.params.name,
-                    blocked: false
+                    img: req.params.img,
                 };
 
                 //console.log(req);
