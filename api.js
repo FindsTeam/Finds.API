@@ -1,3 +1,5 @@
+require("./app/services/mongoose");
+const routes = require("./app/routes");
 const express = require("express");
 const app = express();
 const port = 3000;
@@ -9,7 +11,7 @@ app.use(function(req, res, next) {
     next();
 });
 
-const routes = require("./routes/index");
+routes(app, __dirname);
 app.use("/api", routes);
 
 const server = app.listen(process.env.PORT || 3000);
