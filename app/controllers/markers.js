@@ -3,11 +3,10 @@ const Markers = require("../models/markers");
 
 module.exports.createMarker = (req, res) => {
     Markers.findOne({ title: req.body.title }, (err, user) => {
-        if (err !== null) {
-            res.json("Error");
+        if (err) {
+            res.json("Error: " + err);
         } else {
             var marker = new Markers();
-
             marker.title = req.body.title;
             marker.location = [parseFloat(req.body.lat), parseFloat(req.body.lng)]
             marker.zoom = parseFloat(req.body.zoom);
@@ -37,12 +36,9 @@ module.exports.getMarkersNear = (req, res) => {
         center: point,
         maxDistance: 3000
     }).exec((err, results, stats) => {
-        console.log('Geo Results', results);
         if (err) {
-            console.log('geoNear error:', err);
             res.json(err);
         } else {
-            console.log(results, stats);
             res.json(results);
         }
     });
