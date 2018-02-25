@@ -2,19 +2,18 @@ const mongoose = require("mongoose");
 
 mongoose.Promise = Promise;
 
-var marker = new mongoose.Schema({
+const marker = new mongoose.Schema({
     title: {
         type: String,
         unique: true,
         required: true
     },
-    lat: {
-        type: Number,
-        required: false
-    },
-    lng: {
-        type: Number,
-        required: false
+    location: {
+        type: [Number],
+        index: {
+            type: '2dsphere',
+            sparse: true
+        }
     },
     zoom: {
         type: Number,
@@ -45,5 +44,7 @@ var marker = new mongoose.Schema({
         required: false
     }
 });
+
+marker.index({ loc: "2dsphere" });
 
 module.exports = mongoose.model("markers", marker);
