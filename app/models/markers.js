@@ -10,39 +10,39 @@ var marker = new mongoose.Schema({
     },
     lat: {
         type: Number,
-        required: true
+        required: false
     },
     lng: {
         type: Number,
-        required: true
+        required: false
     },
     zoom: {
         type: Number,
-        required: true
+        required: false
     },
     type: {
         type: String,
-        required: true
+        required: false
     },
     description: {
         type: String,
-        required: true
+        required: false
     },
     adress: {
         type: String,
-        required: true
+        required: false
     },
     time: {
         type: String,
-        required: true
+        required: false
     },
     img: {
         type: String,
-        required: true
+        required: false
     },
     date: {
         type: String,
-        required: true
+        required: false
     }
 });
 
