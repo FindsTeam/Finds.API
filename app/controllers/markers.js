@@ -10,7 +10,7 @@ module.exports.createMarker = (req, res) => {
 
             marker.title = req.body.title;
             marker.location = [parseFloat(req.body.lat), parseFloat(req.body.lng)]
-            marker.zoom = req.body.zoom;
+            marker.zoom = parseFloat(req.body.zoom);
             marker.type = req.body.type;
             marker.description = req.body.description;
             marker.adress = req.body.adress;
@@ -26,8 +26,8 @@ module.exports.createMarker = (req, res) => {
 }
 
 module.exports.getMarkersNear = (req, res) => {
-    const lng = parseFloat(req.params.lng);
     const lat = parseFloat(req.params.lat);
+    const lng = parseFloat(req.params.lng);
     const point = {
         type: "Point",
         coordinates: [lat, lng]

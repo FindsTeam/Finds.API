@@ -10,7 +10,6 @@ module.exports.login = function(req, res) {
             var user = new Users();
             user.email = req.params.email;
             user.name = req.params.name;
-
             user.save().then(function(err, item) {
                 res.json("User is created");
             })
