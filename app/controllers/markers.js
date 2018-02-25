@@ -30,22 +30,20 @@ module.exports.getMarkersNear = (req, res) => {
     const lat = parseFloat(req.params.lat);
     const point = {
         type: "Point",
-        coordinates: [lng, lat]
+        coordinates: [lat, lng]
     };
-    const geoOptions = {
-        spherical: true,
-        maxDistance: 10,
-        num: 10
-    };
-    Markers.geoFind(point, geoOptions, (err, results, stats) => {
+
+    Markers.find().where("location").near({
+        center: point,
+        maxDistance: 3000
+    }).exec((err, results, stats) => {
         console.log('Geo Results', results);
-        console.log('Geo stats', stats);
         if (err) {
             console.log('geoNear error:', err);
-            sendJsonResponse(res, 404, err);
+            res.json(err);
         } else {
-            locations = buildLocationList(req, res, results, stats);
-            sendJsonResponse(res, 200, locations);
+            console.log(results, stats);
+            res.json(results);
         }
     });
 }
