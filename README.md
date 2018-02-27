@@ -1,4 +1,12 @@
 <p align="center"> 
+  <a href="https://codeclimate.com/github/GitStearis/freebee-api/maintainability">
+    <img src="https://api.codeclimate.com/v1/badges/f02a456a6442de50e7ad/maintainability" />
+  </a>
+  <a class="badge-align" href="https://www.codacy.com/app/GitStearis/freebee-api?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=GitStearis/freebee-api&amp;utm_campaign=Badge_Grade">
+    <img src="https://api.codacy.com/project/badge/Grade/ac00fde54e5242dbb13602483384c74c"/>
+  </a>
+</p>
+<p align="center"> 
   <img src="https://lh6.googleusercontent.com/mCWEpEk5OwXmiy_vEZouILYXhJmHEwr14LGL4aqREl7ZZZen3pVyQ1W7aKkm8hULiaEUYxQtFuUCT426l0Bm=w1366-h662-rw">
 </p>
 
