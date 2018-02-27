@@ -11,7 +11,7 @@ const marker = new mongoose.Schema({
     location: {
         type: [Number],
         index: {
-            type: '2dsphere',
+            type: "2dsphere",
             sparse: true
         }
     },

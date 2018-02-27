@@ -6,13 +6,13 @@ module.exports.login = (req, res) => {
         if (err) {
             res.json("Error: " + err);
         } else {
-            var user = new Users();
+            const user = new Users();
             user.email = req.params.email;
             user.name = req.params.name;
 
             user.save().then((err, item) => {
                 res.json("User is created");
-            })
-        };
+            });
+        }
     });
-}
+};

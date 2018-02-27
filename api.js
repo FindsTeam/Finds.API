@@ -1,7 +1,7 @@
 require("./app/mongoose");
 
 const routesApi = require("./app/routes/index");
-const bodyParser = require('body-parser');
+const bodyParser = require("body-parser");
 const express = require("express");
 
 const app = express();

@@ -8,7 +8,7 @@ module.exports.createMarker = (req, res) => {
         } else {
             var marker = new Markers();
             marker.title = req.body.title;
-            marker.location = [parseFloat(req.body.lat), parseFloat(req.body.lng)]
+            marker.location = [parseFloat(req.body.lat), parseFloat(req.body.lng)];
             marker.zoom = parseFloat(req.body.zoom);
             marker.type = req.body.type;
             marker.description = req.body.description;
@@ -19,10 +19,10 @@ module.exports.createMarker = (req, res) => {
 
             marker.save().then(function(err, item) {
                 res.json("Marker is created");
-            })
-        };
+            });
+        }
     });
-}
+};
 
 module.exports.getMarkersNear = (req, res) => {
     const lat = parseFloat(req.params.lat);
