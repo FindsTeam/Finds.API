@@ -7,7 +7,7 @@
   </a>
 </p>
 <p align="center"> 
-  <img src="https://lh6.googleusercontent.com/mCWEpEk5OwXmiy_vEZouILYXhJmHEwr14LGL4aqREl7ZZZen3pVyQ1W7aKkm8hULiaEUYxQtFuUCT426l0Bm=w1366-h662-rw">
+  <img src="https://lh6.googleusercontent.com/Pa3xmFfZsVSxJ5k1Nn9OfqzAa3C-P3YEUgfvq7tG9RfQ0EVfpsMUMo5FK5Od9WPRjIGvg8JbywtFQSqjG2hb=w1920-h974-rw">
 </p>
 
 # Freebee
