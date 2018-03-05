@@ -6,8 +6,9 @@
     <img src="https://api.codacy.com/project/badge/Grade/ac00fde54e5242dbb13602483384c74c"/>
   </a>
 </p>
+
 <p align="center"> 
-  <img src="https://lh6.googleusercontent.com/mCWEpEk5OwXmiy_vEZouILYXhJmHEwr14LGL4aqREl7ZZZen3pVyQ1W7aKkm8hULiaEUYxQtFuUCT426l0Bm=w1366-h662-rw">
+  <img src='http://www.picshare.ru/uploads/180305/8lmk32K50q.png' alt='Freebee'/>
 </p>
 
 # Freebee
