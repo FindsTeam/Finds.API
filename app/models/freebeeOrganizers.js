@@ -27,6 +27,10 @@ const freebeeOrganizers = new mongoose.Schema({
       type: String,
       required: false,
     }
+  },
+  organized_freebie: {
+    type: [String],
+    required: false
   }
 });
 
