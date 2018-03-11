@@ -11,22 +11,13 @@ const freebeeOrganizers = new mongoose.Schema({
     type: String,
     required: true
   },
-  location: { // or google id object
-    type: [Number],
-    index: {
-        type: "2dsphere",
-        sparse: true
-    }
+  contact_phone: {
+    type: String,
+    required: false,
   },
-  details: {
-    contact_phone: {
-      type: String,
-      required: false,
-    },
-    address: {
-      type: String,
-      required: false,
-    }
+  address: {
+    type: String,
+    required: false,
   },
   organized_freebie: {
     type: [String],
