@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 mongoose.Promise = Promise;
 
-const freebeeMarker = new mongoose.Schema({
+const freebeeMarkers = new mongoose.Schema({
   freebee: { // get from mongodb
     name: {
       type: String,
@@ -64,3 +64,5 @@ const freebeeMarker = new mongoose.Schema({
     } // like a icon
   } 
 });
+
+module.exports = mongoose.model("freebeeMarkers", freebeeMarkers);
