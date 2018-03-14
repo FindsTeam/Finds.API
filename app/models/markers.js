@@ -18,6 +18,10 @@ const marker = new mongoose.Schema({
             sparse: true
         }
     },
+    placeid: { // this field neet to get data about concrete place from google place api
+        type: String,
+        required: true
+    },
     organizer: {
         type: String,
         required: false
