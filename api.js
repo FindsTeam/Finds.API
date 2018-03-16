@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 require("./app/mongoose");
 
 const routesApi = require("./app/routes/index");
@@ -5,7 +7,6 @@ const bodyParser = require("body-parser");
 const express = require("express");
 
 const app = express();
-const port = 3000;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -19,4 +20,4 @@ app.use((req, res, next) => {
 
 app.use("/api", routesApi);
 
-const server = app.listen(process.env.PORT || port);
+const server = app.listen(process.env.PORT);
