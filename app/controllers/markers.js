@@ -42,4 +42,4 @@ module.exports.getMarkersNear = (req, res) => {
             res.json(results);
         }
     });
-}
+};
