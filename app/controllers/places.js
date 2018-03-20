@@ -8,4 +8,4 @@ module.exports.getPlaceById = (req, res) => {
     needle.get(requestUrl, (request, response) => {
         res.json(response.body);
     });
-}
+};
