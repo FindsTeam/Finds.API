@@ -5,7 +5,10 @@ mongoose.Promise = Promise;
 const marker = new mongoose.Schema({
     title: {
         type: String,
-        unique: true,
+        required: true
+    },
+    author_id: {
+        type: String,
         required: true
     },
     location: {
@@ -15,34 +18,38 @@ const marker = new mongoose.Schema({
             sparse: true
         }
     },
-    zoom: {
-        type: Number,
+    placeid: { // this field neet to get data about concrete place from google place api
+        type: String,
+        required: true
+    },
+    organizer: {
+        type: String,
+        required: false
+    },
+    sort: {
+        type: String,
         required: false
     },
     type: {
-        type: String,
+        type: [String],
         required: false
     },
     description: {
         type: String,
         required: false
     },
-    adress: {
-        type: String,
+    creation_date: {
+        type: Date,
+        require: true
+    },
+    start_date: {
+        type: Date,
         required: false
     },
-    time: {
-        type: String,
+    end_date: {
+        type: Date,
         required: false
     },
-    img: {
-        type: String,
-        required: false
-    },
-    date: {
-        type: String,
-        required: false
-    }
 });
 
 marker.index({ loc: "2dsphere" });
