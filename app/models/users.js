@@ -11,6 +11,22 @@ var user = new mongoose.Schema({
     name: {
         type: String,
         required: true
+    },
+    bio: {
+        type: String,
+        required: false
+    },
+    city: {
+        type: String,
+        required: false
+    },
+    country: {
+        type: String,
+        required: false
+    },
+    freebies: {
+        type: [String],
+        required: false
     }
 });
 

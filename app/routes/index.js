@@ -6,6 +6,7 @@ const ctrMarkers = require("../controllers/markers");
 const ctrPlaces = require("../controllers/places");
 
 router.get("/login/:email/:name", ctrLogin.login);
+router.get("/register/:email/:name", ctrLogin.register);
 
 router.post("/marker/new", ctrMarkers.createMarker);
 router.get("/marker/near/:lat/:lng", ctrMarkers.getMarkersNear);
