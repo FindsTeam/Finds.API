@@ -9,7 +9,7 @@ const reducePlace = (place) => {
         types: place.result.types,
         open_now: place.result.opening_hours.open_now,
         opening_hours: place.result.opening_hours.periods
-    }
+    };
 };
 
 module.exports.getPlaceById = (req, res) => {
