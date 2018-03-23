@@ -7,8 +7,8 @@ const reducePlace = (place) => {
         name: place.result.name,
         address: place.result.formatted_address,
         types: place.result.types,
-        open_now: place.result.opening_hours.open_now,
-        opening_hours: place.result.opening_hours.periods
+        openNow: place.result.opening_hours.open_now,
+        openingHours: place.result.opening_hours.periods
     };
 };
 
