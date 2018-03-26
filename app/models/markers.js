@@ -25,10 +25,12 @@ const marker = new mongoose.Schema({
     },
     creationDate: {
         type: Date,
+        default: Date.now,
         required: true
     },
     startDate: {
         type: Date,
+        default: Date.now,
         required: true
     },
     endDate: {
@@ -36,16 +38,16 @@ const marker = new mongoose.Schema({
         required: false
     },
     authorId: {
-        type: Date,
+        type: String,
         required: true
     },
     placeId: {
-        type: Date,
+        type: String,
         required: true
     },
     reviews: {
         type: [Object],
-        required: true
+        required: false
     }
 });
 

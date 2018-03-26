@@ -9,13 +9,14 @@ module.exports.createMarker = (req, res) => {
             var marker = new Markers();
             marker.title = req.body.title;
             marker.location = [parseFloat(req.body.lat), parseFloat(req.body.lng)];
-            marker.zoom = parseFloat(req.body.zoom);
             marker.type = req.body.type;
             marker.description = req.body.description;
-            marker.adress = req.body.adress;
-            marker.time = req.body.time;
-            marker.img = req.body.img;
-            marker.date = req.body.date;
+            marker.creationDate = Date.now();
+            marker.startDate = parseInt(req.body.startDate);
+            marker.endDate = parseInt(req.body.endDate);
+            marker.authorId = req.body.authorId;
+            marker.placeId = req.body.placeId;
+            marker.reviews = [];
 
             marker.save().then(function(err, item) {
                 res.json("Marker is created");
