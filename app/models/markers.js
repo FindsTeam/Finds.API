@@ -5,8 +5,10 @@ mongoose.Promise = Promise;
 const marker = new mongoose.Schema({
     title: {
         type: String,
-        unique: false,
-        required: true
+        required: true,
+        index: {
+            unique: false
+        }
     },
     location: {
         type: [Number],
