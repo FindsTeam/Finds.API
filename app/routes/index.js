@@ -1,16 +1,17 @@
 const express = require("express");
 const router = express.Router();
 
-const ctrLogin = require("../controllers/users");
-const ctrMarkers = require("../controllers/markers");
-const ctrPlaces = require("../controllers/places");
+const loginController = require("../controllers/users");
+const markerController = require("../controllers/markers");
+const placesController = require("../controllers/places");
 
-router.get("/login/:email/:name", ctrLogin.login);
-router.get("/register/:email/:name", ctrLogin.register);
+router.get("/login/:email/:name", loginController.login);
+router.get("/register/:email/:name", loginController.register);
 
-router.post("/marker/new", ctrMarkers.createMarker);
-router.get("/marker/near/:lat/:lng", ctrMarkers.getMarkersNear);
+router.post("/marker/new", markerController.createMarker);
+router.get("/marker/:id", markerController.getMarkerById);
+router.get("/marker/near/:lat/:lng", markerController.getMarkersNear);
 
-router.get("/place/:placeId", ctrPlaces.getPlaceById);
+router.get("/place/:placeId", placesController.getPlaceById);
 
 module.exports = router;

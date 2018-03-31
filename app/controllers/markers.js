@@ -19,9 +19,9 @@ const markerFromRequest = (request) => {
 }
 
 module.exports.createMarker = (req, res) => {
-    Markers.findOne({ title: req.body.title }, (err, user) => {
+    Markers.findOne({ title: req.body.title }, (err, marker) => {
         if (err) {
-            res.json(`Can't perform a search: ${err.errmsg}`);
+            res.json(`Can't perform a search: ${err.errmsg}.`);
         } else {
             markerFromRequest(req.body).save((error, item) => {
                 if (error) {
@@ -30,6 +30,16 @@ module.exports.createMarker = (req, res) => {
                     res.json(item);
                 }
             });
+        }
+    });
+};
+
+module.exports.getMarkerById = (req, res) => {
+    Markers.findOne({ _id: req.params.id }, (err, marker) => {
+        if (err) {
+            res.json(`An error occurred during the search.`);
+        } else {
+            res.json(marker);
         }
     });
 };
