@@ -1,23 +1,29 @@
 const mongoose = require("mongoose");
 const Markers = require("../models/markers");
 
+const markerFromRequest = (request) => {
+    var marker = new Markers();
+    if (request) {
+        marker.title = request.title;
+        marker.location = [parseFloat(request.lat), parseFloat(request.lng)];
+        marker.type = request.type;
+        marker.description = request.description;
+        marker.creationDate = Date.now();
+        marker.startDate = parseInt(request.startDate);
+        marker.endDate = parseInt(request.endDate);
+        marker.authorId = request.authorId;
+        marker.placeId = request.placeId;
+        marker.reviews = [];
+    }
+    return marker;
+}
+
 module.exports.createMarker = (req, res) => {
     Markers.findOne({ title: req.body.title }, (err, user) => {
         if (err) {
             res.json(`Can't perform a search: ${err.errmsg}`);
         } else {
-            var marker = new Markers();
-            marker.title = req.body.title;
-            marker.location = [parseFloat(req.body.lat), parseFloat(req.body.lng)];
-            marker.type = req.body.type;
-            marker.description = req.body.description;
-            marker.creationDate = Date.now();
-            marker.startDate = parseInt(req.body.startDate);
-            marker.endDate = parseInt(req.body.endDate);
-            marker.authorId = req.body.authorId;
-            marker.placeId = req.body.placeId;
-            marker.reviews = [];
-            marker.save((error, item) => {
+            markerFromRequest(req.body).save((error, item) => {
                 if (error) {
                     res.json(`Can't save ${item._id}: ${error.errmsg}`);
                 } else {
