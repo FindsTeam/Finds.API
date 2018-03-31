@@ -16,7 +16,7 @@ const markerFromRequest = (request) => {
         marker.reviews = [];
     }
     return marker;
-}
+};
 
 module.exports.createMarker = (req, res) => {
     Markers.findOne({ title: req.body.title }, (err, marker) => {
@@ -35,7 +35,7 @@ module.exports.createMarker = (req, res) => {
 };
 
 module.exports.getMarkerById = (req, res) => {
-    Markers.findOne({ _id: req.params.id }, (err, marker) => {
+    Markers.findById(req.params.id, (err, marker) => {
         if (err) {
             if (err.kind === 'ObjectId') {
                 return res.json({ message: `Could not find a marker with id ${req.params.id}` });
@@ -43,6 +43,26 @@ module.exports.getMarkerById = (req, res) => {
             return res.json({ message: `An error occurred during the search` });
         } else {
             res.json(marker);
+        }
+    });
+};
+
+module.exports.updateMarkerById = (req, res) => {
+    Markers.findById(req.params.id, (err, marker) => {
+        if (err) {
+            if (err.kind === 'ObjectId') {
+                return res.json({ message: `Could not find a marker with id ${req.params.id}` });
+            }
+            return res.json({ message: `An error occurred during the search` });
+        } else {
+            marker = markerFromRequest(req.body);
+            marker.save((error, data) => {
+                if (error) {
+                    return res.json({ message: `Can't update marker "${data._id}"` });
+                } else {
+                    res.json(data);
+                }
+            });
         }
     });
 };
@@ -60,7 +80,7 @@ module.exports.deleteMarkerById = (req, res) => {
         }
         res.json({ message: `Successfully deleted ${req.params.id}` });
     });
-}
+};
 
 module.exports.getMarkersNear = (req, res) => {
     const lat = parseFloat(req.params.lat);

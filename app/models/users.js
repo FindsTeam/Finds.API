@@ -12,6 +12,10 @@ var user = new mongoose.Schema({
         type: String,
         required: true
     },
+    groups: {
+        type: [String],
+        required: true
+    },
     bio: {
         type: String,
         required: false
@@ -27,7 +31,7 @@ var user = new mongoose.Schema({
     freebies: {
         type: [String],
         required: false
-    }
+    },
 });
 
 module.exports = mongoose.model("users", user);
