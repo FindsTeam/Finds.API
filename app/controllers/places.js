@@ -16,6 +16,6 @@ module.exports.getPlaceById = (req, res) => {
     const requestUrl = `${url}placeid=${req.params.placeId}&language=ru&key=${process.env.GOOGLE_API_KEY}`;
 
     needle.get(requestUrl, (request, response) => {
-        res.json(reducePlace(response.body));
+        return res.json(reducePlace(response.body));
     });
 };
