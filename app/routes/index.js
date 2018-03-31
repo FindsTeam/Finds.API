@@ -10,6 +10,7 @@ router.get("/login/:email/:name", loginController.login);
 router.get("/register/:email/:name", loginController.register);
 
 router.get("/user/:id", userController.getUserById);
+router.put("/user/:id", userController.updateUserById);
 
 router.post("/marker", markerController.createMarker);
 router.get("/marker/:id", markerController.getMarkerById);
