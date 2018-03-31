@@ -21,13 +21,13 @@ const markerFromRequest = (request) => {
 module.exports.createMarker = (req, res) => {
     Markers.findOne({ title: req.body.title }, (err, marker) => {
         if (err) {
-            res.json(`Can't perform a search: ${err.errmsg}.`);
+            return res.json(`Can't perform a search: ${err.errmsg}.`);
         } else {
-            markerFromRequest(req.body).save((error, item) => {
+            markerFromRequest(req.body).save((error, data) => {
                 if (error) {
-                    res.json(`Can't save ${item._id}: ${error.errmsg}`);
+                    return res.json({ message: `Can't save marker "${data._id}"` });
                 } else {
-                    res.json(item);
+                    res.json(data);
                 }
             });
         }
@@ -37,12 +37,30 @@ module.exports.createMarker = (req, res) => {
 module.exports.getMarkerById = (req, res) => {
     Markers.findOne({ _id: req.params.id }, (err, marker) => {
         if (err) {
-            res.json(`An error occurred during the search.`);
+            if (err.kind === 'ObjectId') {
+                return res.json({ message: `Could not find a marker with id ${req.params.id}` });
+            }
+            return res.json({ message: `An error occurred during the search` });
         } else {
             res.json(marker);
         }
     });
 };
+
+module.exports.deleteMarkerById = (req, res) => {
+    Markers.findByIdAndRemove(req.params.id, (err, marker) => {
+        if (err) {
+            if (err.kind === 'ObjectId') {
+                return res.json({ message: `Could not find a marker with id ${req.params.id}` });
+            }
+            return res.json({ message: `Could not delete marker with id ${req.params.id}` });
+        }
+        if (!marker) {
+            return res.json({ message: `Marker with not id ${req.params.id} is not found` });
+        }
+        res.json({ message: `Successfully deleted ${req.params.id}` });
+    });
+}
 
 module.exports.getMarkersNear = (req, res) => {
     const lat = parseFloat(req.params.lat);
@@ -57,9 +75,9 @@ module.exports.getMarkersNear = (req, res) => {
         maxDistance: 3000
     }).exec((err, results, stats) => {
         if (err) {
-            res.json(err);
+            return res.json({ message: `An error occurred during the search` });
         } else {
-            res.json(results);
+            return res.json(results);
         }
     });
 };

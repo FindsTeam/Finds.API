@@ -10,6 +10,7 @@ router.get("/register/:email/:name", loginController.register);
 
 router.post("/marker/new", markerController.createMarker);
 router.get("/marker/:id", markerController.getMarkerById);
+router.delete("/marker/:id", markerController.deleteMarkerById);
 router.get("/marker/near/:lat/:lng", markerController.getMarkersNear);
 
 router.get("/place/:placeId", placesController.getPlaceById);
