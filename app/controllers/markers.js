@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Markers = require("../models/markers");
+const Users = require("../models/users");
 
 const markerFromRequest = (request) => {
     var marker = new Markers();
@@ -18,7 +19,6 @@ const markerFromRequest = (request) => {
     return marker;
 };
 
-// TODO: Add marker id to user-creator
 module.exports.createMarker = (req, res) => {
     Markers.findOne({ title: req.body.title }, (err, marker) => {
         if (err) {
@@ -28,6 +28,16 @@ module.exports.createMarker = (req, res) => {
                 if (error) {
                     return res.json({ message: `Can't save marker "${data._id}"` });
                 } else {
+                    Users.findById(req.body.id, (err, user) => {
+                        if (user) {
+                            user.foundFreebies.push(data._id);
+                            user.save((error) => {
+                                if (error) {
+                                    return res.json({ message: `Can't update user "${req.body.id}"` });
+                                }
+                            });
+                        }
+                    });
                     res.json(data);
                 }
             });
