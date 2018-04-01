@@ -18,6 +18,7 @@ const markerFromRequest = (request) => {
     return marker;
 };
 
+// TODO: Add marker id to user-creator
 module.exports.createMarker = (req, res) => {
     Markers.findOne({ title: req.body.title }, (err, marker) => {
         if (err) {

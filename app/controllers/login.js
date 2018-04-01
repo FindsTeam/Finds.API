@@ -1,11 +1,7 @@
 const mongoose = require("mongoose");
 const Users = require("../models/users");
 
-const groups = {
-    common: "common",
-    organizer: "organizer",
-    administrator: "administrator"
-};
+const groups = require("./groups");
 
 module.exports.register = (req, res) => {
     Users.findOne({ email: req.params.email }, (err, user) => {

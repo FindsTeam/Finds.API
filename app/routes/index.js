@@ -11,6 +11,7 @@ router.get("/register/:email/:name", loginController.register);
 
 router.get("/user/:id", userController.getUserById);
 router.put("/user/:id", userController.updateUserById);
+router.put("/user/evolve/:id", userController.becomeOrganizer);
 
 router.post("/marker", markerController.createMarker);
 router.get("/marker/:id", markerController.getMarkerById);

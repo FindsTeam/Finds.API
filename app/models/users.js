@@ -28,7 +28,19 @@ var user = new mongoose.Schema({
         type: String,
         required: false
     },
-    freebies: {
+    phone: {
+        type: String,
+        required: false
+    },
+    address: {
+        type: String,
+        required: false
+    },
+    organizedFreebies: {
+        type: [String],
+        required: false
+    },
+    foundFreebies: {
         type: [String],
         required: false
     },
