@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
-const Users = require("../models/users");
 
+const Users = require("../models/users");
 const groups = require("../models/groups");
 
 module.exports.getUserById = (req, res) => {

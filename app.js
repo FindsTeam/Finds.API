@@ -1,12 +1,13 @@
 require("dotenv").config();
 
-require("./app/mongoose");
-
 const express = require("express");
 const bodyParser = require("body-parser");
 
 const routesApi = require("./app/routes/index");
-const checkJwt = require('./app/middleware/jwt');
+const checkJwt = require("./app/middleware/jwt");
+const database = require("./app/mongoose");
+
+database.connect();
 
 const app = express();
 
