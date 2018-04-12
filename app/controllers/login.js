@@ -4,7 +4,7 @@ const Users = require("../models/users");
 const groups = require("../models/groups");
 
 module.exports.register = (req, res) => {
-    Users.findOne({ email: req.params.email }, (err, user) => {
+    Users.findOne({ email: req.params.email, name: req.params.name }, (err, user) => {
         if (err) {
             return res.json({ message: `An error occurred during the search` });
         } else {
