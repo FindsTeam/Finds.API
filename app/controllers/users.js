@@ -16,6 +16,19 @@ module.exports.getUserById = (req, res) => {
     });
 };
 
+module.exports.getUserByName = (req, res) => {
+    Users.findOne({ name: req.params.name }, (err, user) => {
+        if (err) {
+            if (err.kind === 'ObjectId') {
+                return res.json({ message: `Could not find a user with name ${req.params.name}` });
+            }
+            return res.json({ message: `An error occurred during the search` });
+        } else {
+            res.json(user);
+        }
+    });
+};
+
 module.exports.updateUserById = (req, res) => {
     Users.findById(req.params.id, (err, user) => {
         if (err) {

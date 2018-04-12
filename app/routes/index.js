@@ -9,8 +9,10 @@ const userController = require("../controllers/users");
 router.get("/login/:email/:name", loginController.login);
 router.get("/register/:email/:name", loginController.register);
 
-router.get("/user/:id", userController.getUserById);
+router.get("/user/id/:id", userController.getUserById);
+router.get("/user/name/:name", userController.getUserByName);
 router.put("/user/:id", userController.updateUserById);
+
 router.put("/user/evolve/:id", userController.becomeOrganizer);
 
 router.post("/marker", markerController.createMarker);

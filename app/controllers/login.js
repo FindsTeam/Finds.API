@@ -16,7 +16,7 @@ module.exports.register = (req, res) => {
                 user.name = req.params.name;
                 user.groups = groups.common;
                 user.save().then(() => {
-                    return res.json({ message: "Successfully created" });
+                    return res.json({ id: user._id, message: "Successfully created" });
                 });
             }
         }
@@ -29,7 +29,7 @@ module.exports.login = (req, res) => {
             return res.json({ message: `An error occurred during the search` });
         } else {
             if (user) {
-                return res.json({ message: "Logged in" });
+                return res.json({ id: user._id, message: "Logged in" });
             } else {
                 return res.json({ message: "No user with such credentials" });
             }
