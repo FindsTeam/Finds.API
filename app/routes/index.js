@@ -6,6 +6,7 @@ const markerController = require("../controllers/markers");
 const placeController = require("../controllers/places");
 const userController = require("../controllers/users");
 
+// TODO: Login and register by id_token from Auth0
 router.get("/login/:email/:name", loginController.login);
 router.get("/register/:email/:name", loginController.register);
 
@@ -15,6 +16,7 @@ router.put("/user/:id", userController.updateUserById);
 
 router.put("/user/evolve/:id", userController.becomeOrganizer);
 
+// TODO: Recent by id_token
 router.post("/marker", markerController.createMarker);
 router.get("/marker/:id", markerController.getMarkerById);
 router.put("/marker/:id", markerController.updateMarkerById);
