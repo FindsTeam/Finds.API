@@ -8,7 +8,7 @@
 </p>
 
 <p align="center"> 
-  <img src='http://www.picshare.ru/uploads/180305/8lmk32K50q.png' alt='Freebee'/>
+  <img src='https://drive.google.com/uc?id=1albVAA6GrHQaG0EvN3a1WFCs9irSv5Lk' alt='Freebee logo' width="200" />
 </p>
 
 # Freebee
