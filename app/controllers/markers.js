@@ -24,19 +24,21 @@ const markerFromRequest = (request, authorId) => {
 module.exports.createMarker = (req, res) => {
     Markers.findOne({ title: req.body.title }, (err, marker) => {
         if (err) {
-            return res.json(`Can't perform a search: ${err.errmsg}.`);
+            return res.json({ message: `Can't perform a search: ${err.errmsg}.` });
         } else {
             const { email, name } = decode(req.body.idToken);
             Users.findOne({ email, name }, (err, user) => {
-                if (user) {
+                if (err) {
+                    return res.json({ message: `Can't find user with such id token` });
+                } else {
                     markerFromRequest(req.body, user._id).save((error, data) => {
                         if (error) {
-                            return res.json({ message: `Can't save marker "${data}"` });
+                            return res.json({ message: `Can't save marker` });
                         } else {
                             user.foundFreebies.push(data._id);
                             user.save((error) => {
                                 if (error) {
-                                    return res.json({ message: `Can't update user "${req.body.id}"` });
+                                    return res.json({ message: `Can't update user's found freebees` });
                                 }
                             });
                             res.json(data);
