@@ -1,3 +1,4 @@
+const decode = require('jwt-decode');
 const mongoose = require("mongoose");
 
 const Markers = require("../models/markers");
@@ -91,6 +92,26 @@ module.exports.deleteMarkerById = (req, res) => {
             return res.json({ message: `Marker with not id ${req.params.id} is not found` });
         }
         res.json({ message: `Successfully deleted ${req.params.id}` });
+    });
+};
+
+module.exports.recentMarkersByIdToken = (req, res) => {
+    const { email, name } = decode(req.params.idToken);
+    Users.findOne({ email, name }, (err, user) => {
+        if (err) {
+            return res.json({ message: "Cannot find such user. Please, try later." });
+        } else {
+            Markers.find({ "_id": { "$in": user.foundFreebies } })
+                .sort("-date")
+                .limit(parseInt(req.params.amount, 10))
+                .exec((error, markers) => {
+                    if (err) {
+                        return res.json({ message: "Cannot find recent freebees by this user" });
+                    } else {
+                        return res.json(markers);
+                    }
+                });
+        }
     });
 };
 
