@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const Markers = require("../models/markers");
 const Users = require("../models/users");
 
-const markerFromRequest = (request) => {
+const markerFromRequest = (request, authorId) => {
     var marker = new Markers();
     if (request) {
         marker.title = request.title;
@@ -14,7 +14,7 @@ const markerFromRequest = (request) => {
         marker.creationDate = Date.now();
         marker.startDate = parseInt(request.startDate);
         marker.endDate = parseInt(request.endDate);
-        marker.authorId = request.authorId;
+        marker.authorId = authorId;
         marker.placeId = request.placeId;
         marker.reviews = [];
     }
@@ -26,21 +26,22 @@ module.exports.createMarker = (req, res) => {
         if (err) {
             return res.json(`Can't perform a search: ${err.errmsg}.`);
         } else {
-            markerFromRequest(req.body).save((error, data) => {
-                if (error) {
-                    return res.json({ message: `Can't save marker "${data._id}"` });
-                } else {
-                    Users.findById(req.body.id, (err, user) => {
-                        if (user) {
+            const { email, name } = decode(req.body.idToken);
+            Users.findOne({ email, name }, (err, user) => {
+                if (user) {
+                    markerFromRequest(req.body, user._id).save((error, data) => {
+                        if (error) {
+                            return res.json({ message: `Can't save marker "${data}"` });
+                        } else {
                             user.foundFreebies.push(data._id);
                             user.save((error) => {
                                 if (error) {
                                     return res.json({ message: `Can't update user "${req.body.id}"` });
                                 }
                             });
+                            res.json(data);
                         }
                     });
-                    res.json(data);
                 }
             });
         }
