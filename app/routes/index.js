@@ -7,8 +7,7 @@ const placeController = require("../controllers/places");
 const userController = require("../controllers/users");
 
 // TODO: Login and register by id_token from Auth0
-router.get("/login/:email/:name", loginController.login);
-router.get("/register/:email/:name", loginController.register);
+router.get("/login/:idToken", loginController.login);
 
 router.get("/user/id/:id", userController.getUserById);
 router.get("/user/name/:name", userController.getUserByName);
