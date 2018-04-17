@@ -7,15 +7,14 @@ const groups = require("../models/groups");
 
 module.exports.getUserByIdToken = (req, res) => {
     const { email, name } = decode(req.params.idToken);
-    console.log(decode(req.params.idToken));
     Users.findOne({ email, name }, (err, user) => {
         if (err) {
-            console.log(err);
             return res.json({ message: `An error occurred during the search` });
         } else {
+            const amount = 5;
             Markers.find({ "_id": { "$in": user.foundFreebies } })
                 .sort("-date")
-                .limit(parseInt(req.params.amount, 5))
+                .limit(amount)
                 .exec((error, markers) => {
                     if (err) {
                         return res.json({ message: "Cannot find freebees by this user" });
