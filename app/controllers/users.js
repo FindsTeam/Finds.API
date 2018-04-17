@@ -2,15 +2,28 @@ const decode = require('jwt-decode');
 const mongoose = require("mongoose");
 
 const Users = require("../models/users");
+const Markers = require("../models/markers");
 const groups = require("../models/groups");
 
 module.exports.getUserByIdToken = (req, res) => {
     const { email, name } = decode(req.params.idToken);
+    console.log(decode(req.params.idToken));
     Users.findOne({ email, name }, (err, user) => {
         if (err) {
+            console.log(err);
             return res.json({ message: `An error occurred during the search` });
         } else {
-            res.json(user);
+            Markers.find({ "_id": { "$in": user.foundFreebies } })
+                .sort("-date")
+                .limit(parseInt(req.params.amount, 5))
+                .exec((error, markers) => {
+                    if (err) {
+                        return res.json({ message: "Cannot find freebees by this user" });
+                    } else {
+                        user.foundFreebies = markers;
+                        return res.json(user);
+                    }
+                });
         }
     });
 };
