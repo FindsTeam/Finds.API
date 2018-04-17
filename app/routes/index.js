@@ -8,10 +8,11 @@ const userController = require("../controllers/users");
 
 router.get("/login/:idToken", loginController.login);
 
+// profile
+router.get("/profile/:idToken", userController.getProfileByIdToken);
+router.put("/profile/:idToken", userController.updateProfileByIdToken);
 // users
-router.get("/user/:idToken", userController.getUserByIdToken);
-router.get("/user/name/:name", userController.getUserByName);
-router.put("/user/:id", userController.updateUserById);
+router.get("/user/:name", userController.getUserByName);
 
 // markers CRUD
 router.post("/marker", markerController.createMarker);

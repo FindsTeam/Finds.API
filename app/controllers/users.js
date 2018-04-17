@@ -5,11 +5,11 @@ const Users = require("../models/users");
 const Markers = require("../models/markers");
 const groups = require("../models/groups");
 
-module.exports.getUserByIdToken = (req, res) => {
+module.exports.getProfileByIdToken = (req, res) => {
     const { email, name } = decode(req.params.idToken);
     Users.findOne({ email, name }, (err, user) => {
         if (err) {
-            return res.json({ message: `An error occurred during the search` });
+            return res.json({ message: `Could not find such user` });
         } else {
             const amount = 5;
             Markers.find({ "_id": { "$in": user.foundFreebies } })
@@ -40,20 +40,18 @@ module.exports.getUserByName = (req, res) => {
     });
 };
 
-module.exports.updateUserById = (req, res) => {
-    Users.findById(req.params.id, (err, user) => {
+module.exports.updateProfileByIdToken = (req, res) => {
+    const { email, name } = decode(req.params.idToken);
+    Users.findOne({ email, name }, (err, user) => {
         if (err) {
-            if (err.kind === 'ObjectId') {
-                return res.json({ message: `Could not find a user with id ${req.params.id}` });
-            }
-            return res.json({ message: `An error occurred during the search` });
+            return res.json({ message: `Could not find such user` });
         } else {
             user.bio = req.body.bio;
             user.city = req.body.city;
             user.country = req.body.country;
             user.save((error, data) => {
                 if (error) {
-                    return res.json({ message: `Can't update user "${data._id}"` });
+                    return res.json({ message: `Can't update user "${user.name}"` });
                 } else {
                     res.json(data);
                 }
