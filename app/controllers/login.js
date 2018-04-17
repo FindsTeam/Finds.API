@@ -16,7 +16,6 @@ const createUser = (email, name, res) => {
 
 module.exports.login = (req, res) => {
     const { email, name } = decode(req.params.idToken);
-    console.log(decode(req.params.idToken));
     Users.findOne({ email, name }, (err, user) => {
         if (err) {
             return res.json({ message: `An error occurred during the login. Please, try later.` });

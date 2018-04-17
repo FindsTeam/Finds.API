@@ -1,14 +1,13 @@
+const decode = require('jwt-decode');
 const mongoose = require("mongoose");
 
 const Users = require("../models/users");
 const groups = require("../models/groups");
 
-module.exports.getUserById = (req, res) => {
-    Users.findById(req.params.id, (err, user) => {
+module.exports.getUserByIdToken = (req, res) => {
+    const { email, name } = decode(req.params.idToken);
+    Users.findOne({ email, name }, (err, user) => {
         if (err) {
-            if (err.kind === 'ObjectId') {
-                return res.json({ message: `Could not find a user with id ${req.params.id}` });
-            }
             return res.json({ message: `An error occurred during the search` });
         } else {
             res.json(user);

@@ -9,7 +9,7 @@ const userController = require("../controllers/users");
 router.get("/login/:idToken", loginController.login);
 
 // users
-router.get("/user/id/:id", userController.getUserById);
+router.get("/user/:idToken", userController.getUserByIdToken);
 router.get("/user/name/:name", userController.getUserByName);
 router.put("/user/:id", userController.updateUserById);
 
