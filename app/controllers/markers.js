@@ -84,17 +84,28 @@ module.exports.updateMarkerById = (req, res) => {
 };
 
 module.exports.deleteMarkerById = (req, res) => {
-    Markers.findByIdAndRemove(req.params.id, (err, marker) => {
+    const { email, name } = decode(req.params.idToken);
+    Users.findOne({ email, name }, (err, user) => {
         if (err) {
-            if (err.kind === 'ObjectId') {
-                return res.json({ message: `Could not find a marker with id ${req.params.id}` });
+            return res.json({ message: `Can't find user with such id token` });
+        } else {
+            if (user.foundFreebies.includes(req.params.id)) {
+                Markers.findByIdAndRemove(req.params.id, (err, marker) => {
+                    if (err) {
+                        if (err.kind === 'ObjectId') {
+                            return res.json({ message: `Could not find a marker with id ${req.params.id}` });
+                        }
+                        return res.json({ message: `Could not delete marker with id ${req.params.id}` });
+                    } else if (!marker) {
+                        return res.json({ message: `Marker with not id ${req.params.id} is not found` });
+                    } else {
+                        res.json({ message: `Successfully deleted ${req.params.id}` });
+                    }  
+                });
+            } else {
+                res.json({ message: `The marker couldn't be deleted by this user` });
             }
-            return res.json({ message: `Could not delete marker with id ${req.params.id}` });
         }
-        if (!marker) {
-            return res.json({ message: `Marker with not id ${req.params.id} is not found` });
-        }
-        res.json({ message: `Successfully deleted ${req.params.id}` });
     });
 };
 

@@ -18,7 +18,7 @@ router.get("/user/:name", userController.getUserByName);
 router.post("/marker", markerController.createMarker);
 router.get("/marker/:id", markerController.getMarkerById);
 router.put("/marker/:id", markerController.updateMarkerById);
-router.delete("/marker/:id", markerController.deleteMarkerById);
+router.delete("/marker/:idToken/:id", markerController.deleteMarkerById);
 // markers + users
 router.get("/marker/:idToken/:amount", markerController.recentMarkersByIdToken);
 // markers + position
