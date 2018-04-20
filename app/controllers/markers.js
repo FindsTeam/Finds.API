@@ -4,6 +4,10 @@ const mongoose = require("mongoose");
 const Markers = require("../models/markers");
 const Users = require("../models/users");
 
+Array.prototype.remove = (element) => {
+    return this.filter(e => e !== element);
+}
+
 const markerFromRequest = (request, authorId) => {
     var marker = new Markers();
     if (request) {
@@ -41,7 +45,7 @@ module.exports.createMarker = (req, res) => {
                                     return res.json({ message: `Can't update user's found freebees` });
                                 }
                             });
-                            res.json(data);
+                            return res.json(data);
                         }
                     });
                 }
@@ -99,11 +103,13 @@ module.exports.deleteMarkerById = (req, res) => {
                     } else if (!marker) {
                         return res.json({ message: `Marker with not id ${req.params.id} is not found` });
                     } else {
-                        res.json({ message: `Successfully deleted ${req.params.id}` });
+                        Users.updateOne({ email, name }, { "$set": { foundFreebies: user.foundFreebies.remove(req.params.id)}}, () => {
+                            return res.json({ message: `Successfully deleted ${req.params.id}` });
+                        });
                     }  
                 });
             } else {
-                res.json({ message: `The marker couldn't be deleted by this user` });
+                return res.json({ message: `The marker couldn't be deleted by this user` });
             }
         }
     });
