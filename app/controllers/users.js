@@ -19,8 +19,20 @@ module.exports.getProfileByIdToken = (req, res) => {
                     if (err) {
                         return res.json({ message: "Cannot find freebees by this user" });
                     } else {
-                        user.foundFreebies = markers;
-                        return res.json(user);
+                        const userToSend = {};
+                        userToSend.email = user.email;
+                        userToSend.name = user.name;
+                        userToSend.groups = user.groups;
+                        userToSend.bio = user.bio;
+                        userToSend.city = user.city;
+                        userToSend.country = user.country;
+                        userToSend.phone = user.phone;
+                        userToSend.foundFreebies = markers;
+
+                        // user.foundFreebies = markers;
+                        // return res.json(user);
+
+                        return res.json(userToSend);
                     }
                 });
         }
