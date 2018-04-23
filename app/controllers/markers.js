@@ -1,12 +1,12 @@
-const decode = require('jwt-decode');
+const decode = require("jwt-decode");
 const mongoose = require("mongoose");
 
 const Markers = require("../models/markers");
 const Users = require("../models/users");
 
 Array.prototype.remove = (element) => {
-    return this.filter(e => e !== element);
-}
+    return this.filter((e) => e !== element);
+};
 
 const markerFromRequest = (request, authorId) => {
     var marker = new Markers();
@@ -42,7 +42,7 @@ module.exports.createMarker = (req, res) => {
                             user.foundFreebies.push(data._id);
                             user.save((error) => {
                                 if (error) {
-                                    return res.json({ message: `Can't update user's found freebees` });
+                                    return res.json({ message: `Can't update user"s found freebees` });
                                 }
                             });
                             return res.json(data);
@@ -57,7 +57,7 @@ module.exports.createMarker = (req, res) => {
 module.exports.getMarkerById = (req, res) => {
     Markers.findById(req.params.id, (err, marker) => {
         if (err) {
-            if (err.kind === 'ObjectId') {
+            if (err.kind === "ObjectId") {
                 return res.json({ message: `Could not find a marker with id ${req.params.id}` });
             }
             return res.json({ message: `An error occurred during the search` });
@@ -76,7 +76,7 @@ module.exports.updateMarkerById = (req, res) => {
             if (user.foundFreebies.includes(req.params.id)) {
                 Markers.findById(req.params.id, (err, marker) => {
                     if (err) {
-                        if (err.kind === 'ObjectId') {
+                        if (err.kind === "ObjectId") {
                             return res.json({ message: `Could not find a marker with id ${req.params.id}` });
                         }
                         return res.json({ message: `An error occurred during the search` });
@@ -105,7 +105,7 @@ module.exports.deleteMarkerById = (req, res) => {
             if (user.foundFreebies.includes(req.params.id)) {
                 Markers.findByIdAndRemove(req.params.id, (err, marker) => {
                     if (err) {
-                        if (err.kind === 'ObjectId') {
+                        if (err.kind === "ObjectId") {
                             return res.json({ message: `Could not find a marker with id ${req.params.id}` });
                         }
                         return res.json({ message: `Could not delete marker with id ${req.params.id}` });
@@ -118,7 +118,7 @@ module.exports.deleteMarkerById = (req, res) => {
                     }  
                 });
             } else {
-                return res.json({ message: `The marker couldn't be deleted by this user` });
+                return res.json({ message: `The marker couldn"t be deleted by this user` });
             }
         }
     });

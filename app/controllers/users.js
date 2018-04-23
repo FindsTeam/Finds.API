@@ -1,4 +1,4 @@
-const decode = require('jwt-decode');
+const decode = require("jwt-decode");
 const mongoose = require("mongoose");
 
 const Users = require("../models/users");
@@ -9,7 +9,7 @@ module.exports.getProfileByIdToken = (req, res) => {
     const { email, name } = decode(req.params.idToken);
     Users.findOne({ email, name }, (err, user) => {
         if (err) {
-            return res.json({ message: `Could not find such user` });
+            return res.json({ message: "Could not find such user" });
         } else {
             const amount = 5;
             Markers.find({ "_id": { "$in": user.foundFreebies } })
@@ -38,10 +38,10 @@ module.exports.getProfileByIdToken = (req, res) => {
 module.exports.getUserByName = (req, res) => {
     Users.findOne({ name: req.params.name }, (err, user) => {
         if (err) {
-            if (err.kind === 'ObjectId') {
+            if (err.kind === "ObjectId") {
                 return res.json({ message: `Could not find a user with name ${req.params.name}` });
             }
-            return res.json({ message: `An error occurred during the search` });
+            return res.json({ message: "An error occurred during the search" });
         } else {
             res.json(user);
         }

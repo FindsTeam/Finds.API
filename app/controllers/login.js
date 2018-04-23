@@ -1,4 +1,4 @@
-const decode = require('jwt-decode');
+const decode = require("jwt-decode");
 const mongoose = require("mongoose");
 
 const Users = require("../models/users");
@@ -18,7 +18,7 @@ module.exports.login = (req, res) => {
     const { email, name } = decode(req.params.idToken);
     Users.findOne({ email, name }, (err, user) => {
         if (err) {
-            return res.json({ message: `An error occurred during the login. Please, try later.` });
+            return res.json({ message: "An error occurred during the login. Please, try later." });
         } else {
             if (user) {
                 return res.json({ user, message: "Logged in" });

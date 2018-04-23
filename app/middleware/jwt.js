@@ -1,5 +1,5 @@
-const jwt = require('express-jwt');
-const jwks = require('jwks-rsa');
+const jwt = require("express-jwt");
+const jwks = require("jwks-rsa");
 
 const checkJwt = jwt({
     secret: jwks.expressJwtSecret({
@@ -10,7 +10,7 @@ const checkJwt = jwt({
     }),
     aud: process.env.AUTH0_API_IDENTIFIER,
     issuer: process.env.AUTH0_DOMAIN,
-    algorithms: ['RS256']
+    algorithms: ["RS256"]
 });
 
 module.exports = checkJwt;
