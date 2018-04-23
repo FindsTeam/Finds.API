@@ -71,7 +71,7 @@ module.exports.updateMarkerById = (req, res) => {
     const { email, name } = decode(req.params.idToken);
     Users.findOne({ email, name }, (err, user) => {
         if (err) {
-            return res.json({ message: `Can't find user with such id token` });
+            return res.json({ message: "Can't find user with such id token" });
         } else {
             if (user.foundFreebies.includes(req.params.id)) {
                 Markers.findById(req.params.id, (err, marker) => {
@@ -79,7 +79,7 @@ module.exports.updateMarkerById = (req, res) => {
                         if (err.kind === "ObjectId") {
                             return res.json({ message: `Could not find a marker with id ${req.params.id}` });
                         }
-                        return res.json({ message: `An error occurred during the search` });
+                        return res.json({ message: "An error occurred during the search" });
                     } else {
                         marker = markerFromRequest(req.body);
                         marker.save((error, data) => {
