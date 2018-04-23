@@ -33,16 +33,16 @@ module.exports.createMarker = (req, res) => {
             const { email, name } = decode(req.body.idToken);
             Users.findOne({ email, name }, (err, user) => {
                 if (err) {
-                    return res.json({ message: `Can't find user with such id token` });
+                    return res.json({ message: "Can't find user with such id token" });
                 } else {
                     markerFromRequest(req.body, user._id).save((error, data) => {
                         if (error) {
-                            return res.json({ message: `Can't save marker` });
+                            return res.json({ message: "Can't save marker" });
                         } else {
                             user.foundFreebies.push(data._id);
                             user.save((error) => {
                                 if (error) {
-                                    return res.json({ message: `Can't update user"s found freebees` });
+                                    return res.json({ message: "Can't update user's found freebees" });
                                 }
                             });
                             return res.json(data);
@@ -60,7 +60,7 @@ module.exports.getMarkerById = (req, res) => {
             if (err.kind === "ObjectId") {
                 return res.json({ message: `Could not find a marker with id ${req.params.id}` });
             }
-            return res.json({ message: `An error occurred during the search` });
+            return res.json({ message: "An error occurred during the search" });
         } else {
             res.json(marker);
         }
@@ -118,7 +118,7 @@ module.exports.deleteMarkerById = (req, res) => {
                     }  
                 });
             } else {
-                return res.json({ message: `The marker couldn"t be deleted by this user` });
+                return res.json({ message: "The marker couldn't be deleted by this user" });
             }
         }
     });

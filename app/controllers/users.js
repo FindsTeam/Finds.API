@@ -52,7 +52,7 @@ module.exports.updateProfileByIdToken = (req, res) => {
     const { email, name } = decode(req.params.idToken);
     Users.findOne({ email, name }, (err, user) => {
         if (err) {
-            return res.json({ message: `Could not find such user` });
+            return res.json({ message: "Could not find such user" });
         } else {
             user.bio = req.body.bio;
             user.city = req.body.city;
