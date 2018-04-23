@@ -100,7 +100,7 @@ module.exports.deleteMarkerById = (req, res) => {
     const { email, name } = decode(req.params.idToken);
     Users.findOne({ email, name }, (err, user) => {
         if (err) {
-            return res.json({ message: `Can't find user with such id token` });
+            return res.json({ message: "Can't find user with such id token" });
         } else {
             if (user.foundFreebies.includes(req.params.id)) {
                 Markers.findByIdAndRemove(req.params.id, (err, marker) => {
@@ -157,7 +157,7 @@ module.exports.getMarkersNear = (req, res) => {
         maxDistance: 3000
     }).exec((err, results, stats) => {
         if (err) {
-            return res.json({ message: `An error occurred during the search` });
+            return res.json({ message: "An error occurred during the search" });
         } else {
             return res.json(results);
         }
