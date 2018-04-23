@@ -28,10 +28,6 @@ module.exports.getProfileByIdToken = (req, res) => {
                         userToSend.country = user.country;
                         userToSend.phone = user.phone;
                         userToSend.foundFreebies = markers;
-
-                        // user.foundFreebies = markers;
-                        // return res.json(user);
-
                         return res.json(userToSend);
                     }
                 });

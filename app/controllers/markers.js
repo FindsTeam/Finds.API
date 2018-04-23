@@ -68,21 +68,30 @@ module.exports.getMarkerById = (req, res) => {
 };
 
 module.exports.updateMarkerById = (req, res) => {
-    Markers.findById(req.params.id, (err, marker) => {
+    const { email, name } = decode(req.params.idToken);
+    Users.findOne({ email, name }, (err, user) => {
         if (err) {
-            if (err.kind === 'ObjectId') {
-                return res.json({ message: `Could not find a marker with id ${req.params.id}` });
-            }
-            return res.json({ message: `An error occurred during the search` });
+            return res.json({ message: `Can't find user with such id token` });
         } else {
-            marker = markerFromRequest(req.body);
-            marker.save((error, data) => {
-                if (error) {
-                    return res.json({ message: `Can't update marker "${data._id}"` });
-                } else {
-                    res.json(data);
-                }
-            });
+            if (user.foundFreebies.includes(req.params.id)) {
+                Markers.findById(req.params.id, (err, marker) => {
+                    if (err) {
+                        if (err.kind === 'ObjectId') {
+                            return res.json({ message: `Could not find a marker with id ${req.params.id}` });
+                        }
+                        return res.json({ message: `An error occurred during the search` });
+                    } else {
+                        marker = markerFromRequest(req.body);
+                        marker.save((error, data) => {
+                            if (error) {
+                                return res.json({ message: `Can't update marker "${data._id}"` });
+                            } else {
+                                res.json(data);
+                            }
+                        });
+                    }
+                });
+            }
         }
     });
 };

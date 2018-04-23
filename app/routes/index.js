@@ -15,10 +15,11 @@ router.put("/profile/:idToken", userController.updateProfileByIdToken);
 router.get("/user/:name", userController.getUserByName);
 
 // markers CRUD
-router.post("/marker", markerController.createMarker);
 router.get("/marker/:id", markerController.getMarkerById);
-router.put("/marker/:id", markerController.updateMarkerById);
+router.post("/marker", markerController.createMarker);
 router.delete("/marker/:idToken/:id", markerController.deleteMarkerById);
+router.put("/marker/:idToken/:id", markerController.updateMarkerById);
+
 // markers + users
 router.get("/marker/:idToken/:amount", markerController.recentMarkersByIdToken);
 // markers + position
