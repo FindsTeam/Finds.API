@@ -1,25 +1,145 @@
+const decode = require("jwt-decode");
 const mongoose = require("mongoose");
+
 const Markers = require("../models/markers");
+const Users = require("../models/users");
+
+Array.prototype.remove = (element) => {
+    return this.filter((e) => e !== element);
+};
+
+const markerFromRequest = (request, authorId) => {
+    var marker = new Markers();
+    if (request) {
+        marker.title = request.title;
+        marker.location = [parseFloat(request.lat), parseFloat(request.lng)];
+        marker.type = request.type;
+        marker.description = request.description;
+        marker.creationDate = Date.now();
+        marker.startDate = parseInt(request.startDate);
+        marker.endDate = parseInt(request.endDate);
+        marker.authorId = authorId;
+        marker.placeId = request.placeId;
+        marker.reviews = [];
+    }
+    return marker;
+};
 
 module.exports.createMarker = (req, res) => {
-    Markers.findOne({ title: req.body.title }, (err, user) => {
+    Markers.findOne({ title: req.body.title }, (err, marker) => {
         if (err) {
-            res.json("Error: " + err);
+            return res.json({ message: `Can't perform a search: ${err.errmsg}.` });
         } else {
-            var marker = new Markers();
-            marker.title = req.body.title;
-            marker.location = [parseFloat(req.body.lat), parseFloat(req.body.lng)];
-            marker.zoom = parseFloat(req.body.zoom);
-            marker.type = req.body.type;
-            marker.description = req.body.description;
-            marker.adress = req.body.adress;
-            marker.time = req.body.time;
-            marker.img = req.body.img;
-            marker.date = req.body.date;
-
-            marker.save().then(function(err, item) {
-                res.json("Marker is created");
+            const { email, name } = decode(req.body.idToken);
+            Users.findOne({ email, name }, (err, user) => {
+                if (err) {
+                    return res.json({ message: "Can't find user with such id token" });
+                } else {
+                    markerFromRequest(req.body, user._id).save((error, data) => {
+                        if (error) {
+                            return res.json({ message: "Can't save marker" });
+                        } else {
+                            user.foundFreebies.push(data._id);
+                            user.save((error) => {
+                                if (error) {
+                                    return res.json({ message: "Can't update user's found freebees" });
+                                }
+                            });
+                            return res.json(data);
+                        }
+                    });
+                }
             });
+        }
+    });
+};
+
+module.exports.getMarkerById = (req, res) => {
+    Markers.findById(req.params.id, (err, marker) => {
+        if (err) {
+            if (err.kind === "ObjectId") {
+                return res.json({ message: `Could not find a marker with id ${req.params.id}` });
+            }
+            return res.json({ message: "An error occurred during the search" });
+        } else {
+            res.json(marker);
+        }
+    });
+};
+
+module.exports.updateMarkerById = (req, res) => {
+    const { email, name } = decode(req.params.idToken);
+    Users.findOne({ email, name }, (err, user) => {
+        if (err) {
+            return res.json({ message: "Can't find user with such id token" });
+        } else {
+            if (user.foundFreebies.includes(req.params.id)) {
+                Markers.findById(req.params.id, (err, marker) => {
+                    if (err) {
+                        if (err.kind === "ObjectId") {
+                            return res.json({ message: `Could not find a marker with id ${req.params.id}` });
+                        }
+                        return res.json({ message: "An error occurred during the search" });
+                    } else {
+                        marker = markerFromRequest(req.body);
+                        marker.save((error, data) => {
+                            if (error) {
+                                return res.json({ message: `Can't update marker "${data._id}"` });
+                            } else {
+                                res.json(data);
+                            }
+                        });
+                    }
+                });
+            }
+        }
+    });
+};
+
+module.exports.deleteMarkerById = (req, res) => {
+    const { email, name } = decode(req.params.idToken);
+    Users.findOne({ email, name }, (err, user) => {
+        if (err) {
+            return res.json({ message: "Can't find user with such id token" });
+        } else {
+            if (user.foundFreebies.includes(req.params.id)) {
+                Markers.findByIdAndRemove(req.params.id, (err, marker) => {
+                    if (err) {
+                        if (err.kind === "ObjectId") {
+                            return res.json({ message: `Could not find a marker with id ${req.params.id}` });
+                        }
+                        return res.json({ message: `Could not delete marker with id ${req.params.id}` });
+                    } else if (!marker) {
+                        return res.json({ message: `Marker with not id ${req.params.id} is not found` });
+                    } else {
+                        Users.updateOne({ email, name }, { "$set": { foundFreebies: user.foundFreebies.remove(req.params.id)}}, () => {
+                            return res.json({ message: `Successfully deleted ${req.params.id}` });
+                        });
+                    }  
+                });
+            } else {
+                return res.json({ message: "The marker couldn't be deleted by this user" });
+            }
+        }
+    });
+};
+
+module.exports.recentMarkersByIdToken = (req, res) => {
+    const { email, name } = decode(req.params.idToken);
+    Users.findOne({ email, name }, (err, user) => {
+        if (err) {
+            return res.json({ message: "Cannot find such user. Please, try later." });
+        } else {
+            Markers.find({ "_id": { "$in": user.foundFreebies } })
+                .sort("-date")
+                .limit(parseInt(req.params.amount, 10))
+                .exec((error, markers) => {
+                    if (err) {
+                        return res.json({ message: "Cannot find recent freebees by this user" });
+                    } else {
+                        return res.json(markers);
+                    }
+                });
         }
     });
 };
@@ -37,9 +157,9 @@ module.exports.getMarkersNear = (req, res) => {
         maxDistance: 3000
     }).exec((err, results, stats) => {
         if (err) {
-            res.json(err);
+            return res.json({ message: "An error occurred during the search" });
         } else {
-            res.json(results);
+            return res.json(results);
         }
     });
 };

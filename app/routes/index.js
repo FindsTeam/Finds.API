@@ -1,15 +1,31 @@
 const express = require("express");
 const router = express.Router();
 
-const ctrLogin = require("../controllers/users");
-const ctrMarkers = require("../controllers/markers");
-const ctrPlaces = require("../controllers/places");
+const loginController = require("../controllers/login");
+const markerController = require("../controllers/markers");
+const placeController = require("../controllers/places");
+const userController = require("../controllers/users");
 
-router.get("/login/:email/:name", ctrLogin.login);
+router.get("/login/:idToken", loginController.login);
 
-router.post("/marker/new", ctrMarkers.createMarker);
-router.get("/marker/near/:lat/:lng", ctrMarkers.getMarkersNear);
+// profile
+router.get("/profile/:idToken", userController.getProfileByIdToken);
+router.put("/profile/:idToken", userController.updateProfileByIdToken);
+// users
+router.get("/user/:name", userController.getUserByName);
 
-router.get("/place/:placeId", ctrPlaces.getPlaceById);
+// markers CRUD
+router.get("/marker/:id", markerController.getMarkerById);
+router.post("/marker", markerController.createMarker);
+router.delete("/marker/:idToken/:id", markerController.deleteMarkerById);
+router.put("/marker/:idToken/:id", markerController.updateMarkerById);
+
+// markers + users
+router.get("/marker/:idToken/:amount", markerController.recentMarkersByIdToken);
+// markers + position
+router.get("/marker/near/:lat/:lng", markerController.getMarkersNear);
+
+// google
+router.get("/place/:placeId", placeController.getPlaceById);
 
 module.exports = router;
