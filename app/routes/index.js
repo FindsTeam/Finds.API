@@ -12,7 +12,7 @@ router.get("/login/:idToken", loginController.login);
 router.get("/profile/:idToken", userController.getProfileByIdToken);
 router.put("/profile/:idToken", userController.updateProfileByIdToken);
 // users
-router.get("/user/:name", userController.getUserByName);
+router.get("/user/:nickname", userController.getUserByName);
 
 // markers CRUD
 router.get("/marker/:id", markerController.getMarkerById);

@@ -8,7 +8,7 @@ var user = new mongoose.Schema({
         unique: true,
         required: true
     },
-    name: {
+    nickname: {
         type: String,
         required: true
     },

@@ -30,8 +30,8 @@ module.exports.createMarker = (req, res) => {
         if (err) {
             return res.json({ message: `Can't perform a search: ${err.errmsg}.` });
         } else {
-            const { email, name } = decode(req.body.idToken);
-            Users.findOne({ email, name }, (err, user) => {
+            const { email, nickname } = decode(req.body.idToken);
+            Users.findOne({ email, nickname }, (err, user) => {
                 if (err) {
                     return res.json({ message: "Can't find user with such id token" });
                 } else {
@@ -68,8 +68,8 @@ module.exports.getMarkerById = (req, res) => {
 };
 
 module.exports.updateMarkerById = (req, res) => {
-    const { email, name } = decode(req.params.idToken);
-    Users.findOne({ email, name }, (err, user) => {
+    const { email, nickname } = decode(req.params.idToken);
+    Users.findOne({ email, nickname }, (err, user) => {
         if (err) {
             return res.json({ message: "Can't find user with such id token" });
         } else {
@@ -97,8 +97,8 @@ module.exports.updateMarkerById = (req, res) => {
 };
 
 module.exports.deleteMarkerById = (req, res) => {
-    const { email, name } = decode(req.params.idToken);
-    Users.findOne({ email, name }, (err, user) => {
+    const { email, nickname } = decode(req.params.idToken);
+    Users.findOne({ email, nickname }, (err, user) => {
         if (err) {
             return res.json({ message: "Can't find user with such id token" });
         } else {
@@ -112,7 +112,7 @@ module.exports.deleteMarkerById = (req, res) => {
                     } else if (!marker) {
                         return res.json({ message: `Marker with not id ${req.params.id} is not found` });
                     } else {
-                        Users.updateOne({ email, name }, { "$set": { foundFreebies: user.foundFreebies.remove(req.params.id)}}, () => {
+                        Users.updateOne({ email, nickname }, { "$set": { foundFreebies: user.foundFreebies.remove(req.params.id)}}, () => {
                             return res.json({ message: `Successfully deleted ${req.params.id}` });
                         });
                     }  
@@ -125,8 +125,8 @@ module.exports.deleteMarkerById = (req, res) => {
 };
 
 module.exports.recentMarkersByIdToken = (req, res) => {
-    const { email, name } = decode(req.params.idToken);
-    Users.findOne({ email, name }, (err, user) => {
+    const { email, nickname } = decode(req.params.idToken);
+    Users.findOne({ email, nickname }, (err, user) => {
         if (err) {
             return res.json({ message: "Cannot find such user. Please, try later." });
         } else {

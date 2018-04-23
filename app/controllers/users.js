@@ -6,8 +6,8 @@ const Markers = require("../models/markers");
 const groups = require("../models/groups");
 
 module.exports.getProfileByIdToken = (req, res) => {
-    const { email, name } = decode(req.params.idToken);
-    Users.findOne({ email, name }, (err, user) => {
+    const { email, nickname } = decode(req.params.idToken);
+    Users.findOne({ email, nickname }, (err, user) => {
         if (err) {
             return res.json({ message: "Could not find such user" });
         } else {
@@ -21,7 +21,7 @@ module.exports.getProfileByIdToken = (req, res) => {
                     } else {
                         const userToSend = {};
                         userToSend.email = user.email;
-                        userToSend.name = user.name;
+                        userToSend.nickname = user.nickname;
                         userToSend.groups = user.groups;
                         userToSend.bio = user.bio;
                         userToSend.city = user.city;
@@ -36,10 +36,10 @@ module.exports.getProfileByIdToken = (req, res) => {
 };
 
 module.exports.getUserByName = (req, res) => {
-    Users.findOne({ name: req.params.name }, (err, user) => {
+    Users.findOne({ nickname: req.params.nickname }, (err, user) => {
         if (err) {
             if (err.kind === "ObjectId") {
-                return res.json({ message: `Could not find a user with name ${req.params.name}` });
+                return res.json({ message: `Could not find a user with nickname ${req.params.nickname}` });
             }
             return res.json({ message: "An error occurred during the search" });
         } else {
@@ -49,8 +49,8 @@ module.exports.getUserByName = (req, res) => {
 };
 
 module.exports.updateProfileByIdToken = (req, res) => {
-    const { email, name } = decode(req.params.idToken);
-    Users.findOne({ email, name }, (err, user) => {
+    const { email, nickname } = decode(req.params.idToken);
+    Users.findOne({ email, nickname }, (err, user) => {
         if (err) {
             return res.json({ message: "Could not find such user" });
         } else {
@@ -59,7 +59,7 @@ module.exports.updateProfileByIdToken = (req, res) => {
             user.country = req.body.country;
             user.save((error, data) => {
                 if (error) {
-                    return res.json({ message: `Can't update user "${user.name}"` });
+                    return res.json({ message: `Can't update user "${user.nickname}"` });
                 } else {
                     res.json(data);
                 }
