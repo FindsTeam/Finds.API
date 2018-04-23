@@ -1,6 +1,4 @@
-version: 2
-
-jobs:
+version: 1
 
 machine:
   node:
