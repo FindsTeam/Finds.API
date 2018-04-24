@@ -1,15 +1,16 @@
 require("dotenv").config();
 
-const express = require("express");
+const app = require("express")();
+const server = require("http").Server(app);
+const io = require("socket.io")(server);
 const bodyParser = require("body-parser");
 
 const routesApi = require("./app/routes/index");
 const checkJwt = require("./app/middleware/jwt");
 const database = require("./app/mongoose");
+const chatApi = require("./app/routes/chat");
 
 database.connect();
-
-const app = express();
 
 app.use(checkJwt);
 
@@ -25,4 +26,6 @@ app.use((req, res, next) => {
 });
 app.use("/api", routesApi);
 
-const server = app.listen(process.env.PORT);
+server.listen(process.env.PORT);
+
+io.on("connection", (socket) => chatApi(socket));
