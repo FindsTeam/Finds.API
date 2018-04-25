@@ -1,5 +1,6 @@
 module.exports = (socket) => {
-  socket.on("message", function(msg){
-    console.log("message: " + msg);
+  socket.emit("connected");
+  socket.on("message", (message) => {
+    console.log("message: " + message);
   });
 }
