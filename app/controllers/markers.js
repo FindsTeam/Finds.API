@@ -80,7 +80,7 @@ module.exports.updateMarkerById = (req, res) => {
                         marker = markerFromRequest(req.body);
                         marker.save((error, data) => {
                             if (error) {
-                                return res.status(500).json({ message: `Can't update a marker."` });
+                                return res.status(500).json({ message: "Can't update a marker." });
                             } else {
                                 res.json(data);
                             }
