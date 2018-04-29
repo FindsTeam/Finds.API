@@ -10,7 +10,7 @@ const createUser = (email, nickname, res) => {
     user.nickname = nickname;
     user.groups = groups.common;
     user.save().then(() => {
-        return res.json({ user, message: "Successfully created" });
+        return res.json(user);
     });
 };
 
@@ -18,10 +18,10 @@ module.exports.login = (req, res) => {
     const { email, nickname } = decode(req.params.idToken);
     Users.findOne({ email, nickname }, (err, user) => {
         if (err) {
-            return res.json({ message: "An error occurred during the login. Please, try later." });
+            return res.status(500).json({ message: "An error occurred during the login. Please, try later." });
         } else {
             if (user) {
-                return res.json({ user, message: "Logged in" });
+                return res.json(user);
             } else {
                 return createUser(email, nickname, res);
             }
