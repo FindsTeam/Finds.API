@@ -26,23 +26,25 @@ const markerFromRequest = (request, authorId) => {
 };
 
 module.exports.createMarker = (req, res) => {
-    Markers.findOne({ title: req.body.title }, (err, marker) => {
+    const { email, nickname } = decode(req.body.idToken);
+    Users.findOne({ email, nickname }, (err, user) => {
         if (err) {
-            return res.json({ message: `Can't perform a search: ${err.errmsg}.` });
+            return res.status(500).json({ message: "Can't find a user with such credentials." });
         } else {
-            const { email, nickname } = decode(req.body.idToken);
-            Users.findOne({ email, nickname }, (err, user) => {
+            Markers.findOne({ title: req.body.title }, (err, marker) => {
                 if (err) {
-                    return res.json({ message: "Can't find user with such id token" });
+                    return res.status(500).json({ message: "Can't check if a marker already exists." });
+                } else if (marker) {
+                    return res.status(409).json({ message: "Marker with such title already exists." });
                 } else {
                     markerFromRequest(req.body, user._id).save((error, data) => {
                         if (error) {
-                            return res.json({ message: "Can't save marker" });
+                            return res.status(500).json({ message: "Can't save marker." });
                         } else {
                             user.foundFreebies.push(data._id);
                             user.save((error) => {
                                 if (error) {
-                                    return res.json({ message: "Can't update user's found freebees" });
+                                    return res.status(500).json({ message: "Can't update user's found freebees." });
                                 }
                             });
                             return res.json(data);
@@ -57,10 +59,7 @@ module.exports.createMarker = (req, res) => {
 module.exports.getMarkerById = (req, res) => {
     Markers.findById(req.params.id, (err, marker) => {
         if (err) {
-            if (err.kind === "ObjectId") {
-                return res.json({ message: `Could not find a marker with id ${req.params.id}` });
-            }
-            return res.json({ message: "An error occurred during the search" });
+            return res.status(500).json({ message: "Can't check if a marker already exists." });
         } else {
             res.json(marker);
         }
@@ -71,20 +70,17 @@ module.exports.updateMarkerById = (req, res) => {
     const { email, nickname } = decode(req.params.idToken);
     Users.findOne({ email, nickname }, (err, user) => {
         if (err) {
-            return res.json({ message: "Can't find user with such id token" });
+            return res.status(500).json({ message: "Can't find a user with such credentials." });
         } else {
             if (user.foundFreebies.includes(req.params.id)) {
                 Markers.findById(req.params.id, (err, marker) => {
                     if (err) {
-                        if (err.kind === "ObjectId") {
-                            return res.json({ message: `Could not find a marker with id ${req.params.id}` });
-                        }
-                        return res.json({ message: "An error occurred during the search" });
+                        return res.status(500).json({ message: "Can't check if a marker already exists." });
                     } else {
                         marker = markerFromRequest(req.body);
                         marker.save((error, data) => {
                             if (error) {
-                                return res.json({ message: `Can't update marker "${data._id}"` });
+                                return res.status(500).json({ message: "Can't update a marker." });
                             } else {
                                 res.json(data);
                             }
@@ -100,25 +96,20 @@ module.exports.deleteMarkerById = (req, res) => {
     const { email, nickname } = decode(req.params.idToken);
     Users.findOne({ email, nickname }, (err, user) => {
         if (err) {
-            return res.json({ message: "Can't find user with such id token" });
+            return res.status(500).json({ message: "Can't find a user with such credentials." });
         } else {
             if (user.foundFreebies.includes(req.params.id)) {
                 Markers.findByIdAndRemove(req.params.id, (err, marker) => {
                     if (err) {
-                        if (err.kind === "ObjectId") {
-                            return res.json({ message: `Could not find a marker with id ${req.params.id}` });
-                        }
-                        return res.json({ message: `Could not delete marker with id ${req.params.id}` });
-                    } else if (!marker) {
-                        return res.json({ message: `Marker with not id ${req.params.id} is not found` });
+                        return res.status(500).json({ message: "Can't delete marker." });
                     } else {
                         Users.updateOne({ email, nickname }, { "$set": { foundFreebies: user.foundFreebies.remove(req.params.id)}}, () => {
-                            return res.json({ message: `Successfully deleted ${req.params.id}` });
+                            return res.status(200);
                         });
                     }  
                 });
             } else {
-                return res.json({ message: "The marker couldn't be deleted by this user" });
+                return res.status(403).json({ message: "The marker can't be deleted by this user." });
             }
         }
     });
@@ -128,14 +119,14 @@ module.exports.recentMarkersByIdToken = (req, res) => {
     const { email, nickname } = decode(req.params.idToken);
     Users.findOne({ email, nickname }, (err, user) => {
         if (err) {
-            return res.json({ message: "Cannot find such user. Please, try later." });
+            return res.status(500).json({ message: "Can't find a user with such credentials." });
         } else {
             Markers.find({ "_id": { "$in": user.foundFreebies } })
                 .sort("-date")
                 .limit(parseInt(req.params.amount, 10))
                 .exec((error, markers) => {
                     if (err) {
-                        return res.json({ message: "Cannot find recent freebees by this user" });
+                        return res.status(500).json({ message: "Can't find recent freebees by this user." });
                     } else {
                         return res.json(markers);
                     }
@@ -147,17 +138,16 @@ module.exports.recentMarkersByIdToken = (req, res) => {
 module.exports.getMarkersNear = (req, res) => {
     const lat = parseFloat(req.params.lat);
     const lng = parseFloat(req.params.lng);
-    const point = {
-        type: "Point",
-        coordinates: [lat, lng]
-    };
 
     Markers.find().where("location").near({
-        center: point,
+        center: {
+            type: "Point",
+            coordinates: [lat, lng]
+        },
         maxDistance: 3000
     }).exec((err, results, stats) => {
         if (err) {
-            return res.json({ message: "An error occurred during the search" });
+            return res.status(500).json({ message: "An error occurred during the search." });
         } else {
             return res.json(results);
         }

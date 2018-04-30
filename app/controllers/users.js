@@ -9,15 +9,14 @@ module.exports.getProfileByIdToken = (req, res) => {
     const { email, nickname } = decode(req.params.idToken);
     Users.findOne({ email, nickname }, (err, user) => {
         if (err) {
-            return res.json({ message: "Could not find such user" });
+            return res.status(500).json({ message: "Can't find a user with such credentials." });
         } else {
-            const amount = 5;
             Markers.find({ "_id": { "$in": user.foundFreebies } })
                 .sort("-date")
-                .limit(amount)
+                .limit(5)
                 .exec((error, markers) => {
                     if (err) {
-                        return res.json({ message: "Cannot find freebees by this user" });
+                        return res.status(500).json({ message: "Can't' find freebees by this user." });
                     } else {
                         const userToSend = {};
                         userToSend.email = user.email;
@@ -38,10 +37,7 @@ module.exports.getProfileByIdToken = (req, res) => {
 module.exports.getUserByName = (req, res) => {
     Users.findOne({ nickname: req.params.nickname }, (err, user) => {
         if (err) {
-            if (err.kind === "ObjectId") {
-                return res.json({ message: `Could not find a user with nickname ${req.params.nickname}` });
-            }
-            return res.json({ message: "An error occurred during the search" });
+            return res.status(500).json({ message: "Can't find a user with such credentials." });
         } else {
             res.json(user);
         }
@@ -52,14 +48,14 @@ module.exports.updateProfileByIdToken = (req, res) => {
     const { email, nickname } = decode(req.params.idToken);
     Users.findOne({ email, nickname }, (err, user) => {
         if (err) {
-            return res.json({ message: "Could not find such user" });
+            return res.status(500).json({ message: "Can't find a user with such credentials." });
         } else {
             user.bio = req.body.bio;
             user.city = req.body.city;
             user.country = req.body.country;
             user.save((error, data) => {
                 if (error) {
-                    return res.json({ message: `Can't update user "${user.nickname}"` });
+                    return res.status(500).json({ message: "Can't update a user profile." });
                 } else {
                     res.json(data);
                 }
