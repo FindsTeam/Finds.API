@@ -23,11 +23,14 @@
         "express": "^4.16.2",
         "express-jwt": "^5.3.1",
         "express-jwt-authz": "^1.0.0",
+        "faker": "4.1.0",
         "jwks-rsa": "^1.2.1",
         "jwt-decode": "2.2.0",
         "mongodb": "^3.0.3",
         "mongoose": "^5.0.7",
         "needle": "^2.2.0",
-        "nodemon": "^1.15.1"
+        "nodemon": "1.17.3",
+        "random-latitude": "1.0.1",
+        "random-longitude": "1.0.1"
     }
 }
