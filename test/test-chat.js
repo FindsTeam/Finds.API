@@ -1,4 +1,5 @@
 require("dotenv").config();
+require("../app.js");
 
 const chai = require("chai");
 const should = chai.should();
@@ -63,7 +64,7 @@ describe("Testing chat API with a single client", () => {
   });
 });
 
-describe("Testing chat API with a single client", () => {
+describe("Clients", () => {
   var client;
 
   beforeEach(function(done) {
@@ -71,60 +72,55 @@ describe("Testing chat API with a single client", () => {
     clientTwo = io.connect(socketUrl, options);
 
     clientOne.on("connect", () => {
-      console.log("clientOne connected");
       clientOne.on("check token", () => {
         clientOne.emit("token", token);
         clientOne.on("token is valid", () => {
-          console.log("clientOne token is valid");
         });
       });
     });
 
     clientTwo.on("connect", () => {
-      console.log("clientTwo connected");
       clientTwo.on("check token", () => {
         clientTwo.emit("token", token);
         clientTwo.on("token is valid", () => {
-          console.log("clientTwo token is valid");
           done();
         });
       });
     });
-
-    clientOne.on("disconnect", () => {
-      console.log("clientOne disconnected");
-    });
-
-    clientTwo.on("disconnect", () => {
-      console.log("clientTwo disconnected");
-    });
   });
 
-  it("Clients", () => {
-    it("should join a room", (done) => {
-      const roomId = "randomid";
+  it("should join a room", (done) => {
+    const roomId = "randomid";
 
-      clientOne.emit("subscribe", conversation_id);
-      clientTwo.emit("subscribe", conversation_id);
+    clientOne.emit("subscribe", roomId);
+    clientTwo.emit("subscribe", roomId);
 
-      clientOne.emit("send message", {
-        room: roomId,
-        message: "Some message"
+    clientOne.on("subscribed", () => {
+      clientTwo.on("subscribed", () => {
+        done();
       });
-
-      clientOne.on("subscribed", () => {
-        clientTwo.emit("send message", {
-          room: roomId,
-          message: "Some message"
-        });
-
-        clientTwo.on("subscribed", () => {
-          done();
-        })
-      });
-
     });
   });
-
   
+  it("should transfer single message", (done) => {
+    const roomId = "randomid";
+    const message = "It's a message";
+
+    clientOne.emit("subscribe", roomId);
+    clientTwo.emit("subscribe", roomId);
+
+    clientOne.on("subscribed", () => {
+      clientTwo.on("subscribed", () => {
+        clientOne.emit("send message", {
+          room: roomId,
+          message
+        });
+      });
+    });
+
+    clientTwo.on("room message", (data) => {
+      expect(message).to.be.equal(data.message);
+      done();
+    });
+  });
 });

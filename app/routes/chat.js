@@ -11,22 +11,18 @@ module.exports = (socket) => {
         socket.emit("token is valid");
 
         socket.on("subscribe", (room) => {
-          console.log("joining room", room);
-          socket.join(room);
-        });
-
-        socket.on("subscribe", (room) => {
           socket.emit("subscribed");
-          console.log("joining room", room);
+          console.log(user.nickname + " joins room", room);
           socket.join(room);
+
+          socket.on("send message", (data) => {
+            socket.to(data.room).emit("room message", {
+                message: data.message
+            });
+          });
         });
 
-        socket.on("send message", (data) => {
-          console.log("sending room post", data.room);
-          socket.broadcast.to(data.room).emit("conversation private post", {
-              message: data.message
-          });
-      });
+        
       }
     });
   });
