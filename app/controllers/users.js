@@ -11,25 +11,30 @@ module.exports.getProfileByIdToken = (req, res) => {
         if (err) {
             return res.status(500).json({ message: "Can't find a user with such credentials." });
         } else {
-            Markers.find({ "_id": { "$in": user.foundFreebies } })
+            const userToSend = {};
+            userToSend.email = user.email;
+            userToSend.nickname = user.nickname;
+            userToSend.groups = user.groups;
+            userToSend.bio = user.bio;
+            userToSend.city = user.city;
+            userToSend.country = user.country;
+            userToSend.phone = user.phone;                        
+            if (user.foundFreebies) {
+                Markers.find({ "_id": { "$in": user.foundFreebies } })
                 .sort("-date")
                 .limit(5)
                 .exec((error, markers) => {
                     if (err) {
                         return res.status(500).json({ message: "Can't' find freebees by this user." });
-                    } else {
-                        const userToSend = {};
-                        userToSend.email = user.email;
-                        userToSend.nickname = user.nickname;
-                        userToSend.groups = user.groups;
-                        userToSend.bio = user.bio;
-                        userToSend.city = user.city;
-                        userToSend.country = user.country;
-                        userToSend.phone = user.phone;
+                    } else { 
                         userToSend.foundFreebies = markers;
                         return res.json(userToSend);
                     }
                 });
+            } else {
+                return res.json(userToSend);
+            }
+            
         }
     });
 };
