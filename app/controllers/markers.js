@@ -104,7 +104,7 @@ module.exports.deleteMarkerById = (req, res) => {
                         return res.status(500).json({ message: "Can't delete marker." });
                     } else {
                         Users.updateOne({ email, nickname }, { "$set": { foundFreebies: user.foundFreebies.remove(req.params.id)}}, () => {
-                            return res.status(200);
+                            return res.status(200).json();
                         });
                     }  
                 });
