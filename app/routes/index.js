@@ -5,6 +5,7 @@ const loginController = require("../controllers/login");
 const markerController = require("../controllers/markers");
 const placeController = require("../controllers/places");
 const userController = require("../controllers/users");
+const typeController = require("../controllers/types");
 
 router.get("/login/:idToken", loginController.login);
 
@@ -24,6 +25,10 @@ router.put("/marker/:idToken/:id", markerController.updateMarkerById);
 router.get("/marker/:idToken/:amount", markerController.recentMarkersByIdToken);
 // markers + position
 router.get("/marker/near/:lat/:lng", markerController.getMarkersNear);
+
+//types
+router.get("/type/:type", typeController.createType);
+router.get("/types", typeController.getAllTypes);
 
 // google
 router.get("/place/:placeId", placeController.getPlaceById);
