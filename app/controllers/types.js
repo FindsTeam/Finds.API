@@ -22,7 +22,7 @@ module.exports.getAllTypes = (req, res) => {
       return res.status(500).json({ message: "An error occurred during getting types." });
     } else if (types) {
       const typesArray = [];
-      types.map((type) => {typesArray.push(type.title)});
+      types.map((type) => typesArray.push(type.title));
       return res.json(typesArray);
     }
   });
