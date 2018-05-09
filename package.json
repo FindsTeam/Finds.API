@@ -5,7 +5,7 @@
     "main": "app.js",
     "scripts": {
         "start": "nodemon app.js",
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "mocha --exit --timeout 15000"
     },
     "repository": {
         "type": "git",
@@ -19,6 +19,7 @@
     "homepage": "https://github.com/GitStearis/freebee-api#readme",
     "dependencies": {
         "body-parser": "^1.18.2",
+        "chai": "4.1.2",
         "dotenv": "^5.0.1",
         "express": "^4.16.2",
         "express-jwt": "^5.3.1",
@@ -26,11 +27,14 @@
         "faker": "4.1.0",
         "jwks-rsa": "^1.2.1",
         "jwt-decode": "2.2.0",
+        "mocha": "5.1.1",
         "mongodb": "^3.0.3",
         "mongoose": "^5.0.7",
         "needle": "^2.2.0",
-        "nodemon": "1.17.3",
+        "nodemon": "1.17.4",
         "random-latitude": "1.0.1",
-        "random-longitude": "1.0.1"
+        "random-longitude": "1.0.1",
+        "should": "13.2.1",
+        "socket.io": "2.1.0"
     }
 }
