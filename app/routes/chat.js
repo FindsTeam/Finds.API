@@ -35,7 +35,10 @@ const handleMessage = (socket, room, data) => {
 const handleRecent = (socket, room) => {
   const participants = parseParticipants(room);
 
-  Dialogs.findOne({participants}, (error, dialog) => {
+  Dialogs.findOneAndUpdate(
+    {participants},
+    {},
+    { upsert: true }, (error, dialog) => {
     if (dialog) {
       socket.emit("recent messages", dialog.messages);
     } else {    
