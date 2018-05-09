@@ -21,7 +21,6 @@ const userTwo = {
   name: "check"
 };
 
-
 describe("Testing test system", () => {
   describe("true === true", () => {
       it("should return true", () => {
@@ -37,27 +36,14 @@ describe("Testing chat API with a single client", () => {
     client = io.connect(socketUrl, options);
 
     client.on("connect", () => {
-      console.log("connected");
       done();
     });
-
-    client.on("disconnect", () => {
-      console.log("disconnected...");
-    });
   });
+
   it("Client", () => {
     it("should receive 'checkToken' event", (done) => {
       client.on("check token", () => {
         done();
-      });
-    });
-
-    it("should emit a token", (done) => {
-      client.on("check token", () => {
-        client.emit("token", token);
-        client.on("token is valid", () => {
-          done();
-        });
       });
     });
 
@@ -74,6 +60,8 @@ describe("Testing chat API with a single client", () => {
 
 describe("Clients", () => {
   var client;
+  var clientOne;
+  var clientTwo;
 
   beforeEach(function(done) {
     clientOne = io.connect(socketUrl, options);
