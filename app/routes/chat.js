@@ -3,7 +3,7 @@ const decode = require("jwt-decode");
 const Users = require("../models/users");
 const Dialogs = require("../models/dialogs");
 
-parseRoom = (room) => {
+parseParticipants = (room) => {
   const separator = "+";
   if (room.includes(separator)) {
     return participants = room.split(separator).sort();
@@ -15,12 +15,12 @@ module.exports = (socket) => {
   socket.emit("check token");
   socket.on("token", (token) => {
     const { email, nickname } = decode(token);
+
     Users.findOne({ email, nickname }, (err, user) => {
       if (user) {
         socket.emit("token is valid");
 
         socket.on("subscribe", (room) => {
-          const participants = parseRoom(room);
           socket.emit("subscribed");
           socket.join(room);
 
@@ -30,8 +30,9 @@ module.exports = (socket) => {
               date: Date.now(),
               text: data.message
             };
+
             Dialogs.findOneAndUpdate(
-              { participants },
+              { parseParticipants(room) },
               { $push: { messages: message }},
               { upsert: true }, (error, dialog) => {
                 if (!error) {
@@ -42,6 +43,8 @@ module.exports = (socket) => {
             });
           });
         });
+      } else {
+        socket.emit("error");
       }
     });
   });
