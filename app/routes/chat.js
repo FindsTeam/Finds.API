@@ -11,6 +11,39 @@ const parseParticipants = (room) => {
   return [];
 };
 
+const handleMessage = (socket, room, data) => {
+  const message = {
+    from: data.from,
+    date: Date.now(),
+    text: data.message
+  };
+
+  const participants = parseParticipants(room);
+
+  Dialogs.findOneAndUpdate(
+    { participants },
+    { $push: { messages: message }},
+    { upsert: true }, (error, dialog) => {
+      if (!error) {
+        socket.to(data.room).emit("answer", {
+          message: data.message
+        });
+      }
+  });
+};
+
+const handleRecent = (socket, room) => {
+  const participants = parseParticipants(room);
+
+  Dialogs.findOne({participants}, (error, dialog) => {
+    if (dialog) {
+      socket.emit("recent messages", dialog.messages);
+    } else {    
+      socket.emit("error");
+    }
+  });
+};
+
 module.exports = (socket) => {
   socket.emit("check token");
   socket.on("token", (token) => {
@@ -21,29 +54,11 @@ module.exports = (socket) => {
         socket.emit("token is valid");
 
         socket.on("subscribe", (room) => {
-          socket.emit("subscribed");
           socket.join(room);
+          socket.emit("subscribed");
 
-          socket.on("message", (data) => {
-            const message = {
-              from: data.from,
-              date: Date.now(),
-              text: data.message
-            };
-
-            const participants = parseParticipants(room);
-
-            Dialogs.findOneAndUpdate(
-              { participants },
-              { $push: { messages: message }},
-              { upsert: true }, (error, dialog) => {
-                if (!error) {
-                  socket.to(data.room).emit("answer", {
-                    message: data.message
-                  });
-                }
-            });
-          });
+          socket.on("message", (data) => handleMessage(socket, room, data));
+          socket.on("recent", () => handleRecent(socket, room));
         });
       } else {
         socket.emit("error");

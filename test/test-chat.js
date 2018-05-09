@@ -120,4 +120,23 @@ describe("Clients", () => {
       done();
     });
   });
+
+  it("should emit an array of recent messages", (done) => {
+    const roomId = `${userOne.name}+${userTwo.name}`;
+    const message = "It's a message";
+
+    clientOne.emit("subscribe", roomId);
+    clientTwo.emit("subscribe", roomId);
+
+    clientOne.on("subscribed", () => {
+      clientTwo.on("subscribed", () => {
+        clientOne.emit("recent");
+
+        clientOne.on("recent messages", (dialog) => {
+          console.log(dialog);
+          done();
+        });
+      });
+    });
+  });
 });
