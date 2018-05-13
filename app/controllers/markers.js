@@ -8,7 +8,7 @@ Array.prototype.remove = (element) => {
     return this.filter((e) => e !== element);
 };
 
-const markerFromRequest = (request, authorId) => {
+const markerFromRequest = (request, nickname) => {
     var marker = new Markers();
     if (request) {
         marker.title = request.title;
@@ -18,7 +18,7 @@ const markerFromRequest = (request, authorId) => {
         marker.creationDate = Date.now();
         marker.startDate = parseInt(request.startDate);
         marker.endDate = parseInt(request.endDate);
-        marker.authorId = authorId;
+        marker.author = nickname;
         marker.placeId = request.placeId;
         marker.reviews = [];
     }
@@ -37,7 +37,7 @@ module.exports.createMarker = (req, res) => {
                 } else if (marker) {
                     return res.status(409).json({ message: "Marker with such title already exists." });
                 } else {
-                    markerFromRequest(req.body, user._id).save((error, data) => {
+                    markerFromRequest(req.body, nickname).save((error, data) => {
                         if (error) {
                             return res.status(500).json({ message: "Can't save marker." });
                         } else {
