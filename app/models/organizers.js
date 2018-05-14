@@ -26,4 +26,4 @@ var organizer = new mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model("organizers", user);
+module.exports = mongoose.model("organizers", organizer);
