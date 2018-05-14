@@ -12,7 +12,7 @@ database.connect();
 
 const Markers = require("../app/models/markers");
 const Users = require("../app/models/users");
-
+const Organizers = require("../app/models/organizers");
 
 
 const randomMinskLocation = () => {
@@ -63,16 +63,39 @@ const createMarkersLikeAUser = (amount) => {
   });
 };
 
+const createOrganizer = () => {
+  const organizer = new Organizers();
+  organizer.email = faker.internet.email();
+  organizer.city = faker.address.city();
+  organizer.country = faker.address.country();
+  organizer.phone = faker.phone.phoneNumberFormat();
+  organizer.organizedFreebies = [];
+  return organizer;
+}
+
 const createMarkers = (amount) => {
   for (let i = 1; i != amount; i++) {
     setTimeout(() => randomMarker(i).save((error, data) => {
       if (error) {
         console.log(error);
       } else {
-        console.log(`${i}: Saved marker`);
+        console.log(`${i}: Saved`);
       }
     }), i * 5);
   }
 };
 
-createMarkers(config.amount);
+const createOrganizers = (amount) => {
+  for (let i = 1; i != amount; i++) {
+    setTimeout(() => createOrganizer().save((error, data) => {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log(`${i}: Saved`);
+      }
+    }), i * 5);
+  }
+};
+
+createOrganizers(1000);
+// createMarkers(config.amount);
