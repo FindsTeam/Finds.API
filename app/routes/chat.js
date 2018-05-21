@@ -25,9 +25,7 @@ const handleMessage = (socket, room, data) => {
     { $push: { messages: message }},
     { upsert: true }, (error, dialog) => {
       if (!error) {
-        socket.to(room).emit("answer", {
-          message: data.message
-        });
+        socket.to(room).emit("answer", message);
       }
   });
 };
