@@ -23,7 +23,7 @@ const randomMinskLocation = () => {
   return [randomLatitude({min: minLat, max: maxLat}), randomLongitude({min: minLng, max: maxLng})];
 };
 
-const randomMarker = (authorId) => {
+const randomMarker = () => {
   var marker = new Markers();
   marker.title = faker.lorem.words() + " " + faker.random.uuid();
   marker.location = randomMinskLocation();
@@ -32,7 +32,7 @@ const randomMarker = (authorId) => {
   marker.creationDate = Date.parse(faker.date.past());
   marker.startDate = Date.parse(faker.date.past());
   marker.endDate = Date.parse(faker.date.future());
-  marker.authorId = authorId;
+  marker.author = faker.internet.userName();
   marker.placeId = faker.random.uuid();
   marker.reviews = [];
   return marker;
@@ -75,7 +75,7 @@ const createOrganizer = () => {
 
 const createMarkers = (amount) => {
   for (let i = 1; i != amount; i++) {
-    setTimeout(() => randomMarker(i).save((error, data) => {
+    setTimeout(() => randomMarker().save((error, data) => {
       if (error) {
         console.log(error);
       } else {
@@ -97,5 +97,4 @@ const createOrganizers = (amount) => {
   }
 };
 
-createOrganizers(1000);
-// createMarkers(config.amount);
+createMarkers(config.amount);

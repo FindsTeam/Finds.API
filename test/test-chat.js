@@ -133,7 +133,6 @@ describe("Clients", () => {
         clientOne.emit("recent");
 
         clientOne.on("recent messages", (dialog) => {
-          console.log(dialog);
           done();
         });
       });
