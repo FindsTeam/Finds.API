@@ -13,60 +13,100 @@
 
 # Freebee
 
-Freebee – приложение, которое позволяет пользователю находить и отмечать расположение различных бесплатных возможностей, от фонтанчиков с питьевой водой до бесплатных мероприятий.
+It's a map based web-application designed to navigate over free facilities of city (simply put, *freebies*).
 
-## Проблематика
+* [Small VK public page](https://vk.com/freebeeapp);
+* [Freebee at Social Weekend Hackathon](http://telegra.ph/Social-Weekend-Hackathon--kak-ehto-bylo-02-26).
 
-1. При ограниченном бюджете жизненно важные мелочи (например вода) могут быть недоступны, как пример при бюджетных путешествиях;
+## Getting started
 
-2. Недостаток знаний о существующих бесплатных возможностях.
+Clone project to your computer.
 
-## Решение проблем
+```
+$ git clone https://github.com/FreebeeTeam/freebee-api.git
+```
 
-1. Создание приложения (включая базовую заполненность бесплатными возможностями) и его параллельное продвижение в сети;
+### Prerequisites
 
-2. Релиз приложения и его продвижение с помощью рекламных компаний в социальных сетях (таргетинговая реклама, контент маркетинг);
+To start with Freebee API, you should have [Node](https://nodejs.org/en/download/package-manager/) installed.
 
-3. Стимулирование к наполнению приложения самими пользователями с помощью геймификации процесса использования приложения.
+### Installing
 
-## Шаги для решения проблемы
+Install all dependencies.
 
-### Создание веб-приложения
+```
+$ npm install
+```
 
-1. Создание макета клиентского приложения;
+To launch Freebee API you should create `.env` file in a root directory. File should contain:
 
-2. Прототипирование клиентского приложения;
+```
+PORT = 3000
+MONGODB_CONNECTION = 
+GOOGLE_API_KEY = 
+AUTH0_DOMAIN = 
+AUTH0_API_IDENTIFIER = 
+```
 
-3. Настройка статического анализа кода, CI, auto-deployment;
+* `MONGODB_CONNECTION` - a MongoDB [connection string](https://docs.mongodb.com/manual/reference/connection-string/) with credentials;
+* `GOOGLE_API_KEY` - an [API key](https://developers.google.com/maps/documentation/embed/get-api-key) using here to provide information about landmarks via Google Places;
+* `AUTH0_DOMAIN` - Auth0's server location, could be found [here](https://manage.auth0.com/#/applications);
+* `AUTH0_API_IDENTIFIER` - friendly name for app API, could be changed in [APIs](https://manage.auth0.com/#/apis) tab of Auth0 Dashboard.
 
-4. Создание и настройка базы данных;
+To run server on localhost type  `npm start`  in root folder.
 
-5. Написание RESTful API;
+```
+$ npm start
+```
 
-6. Написание клиентского приложения;
+## Deployment
 
-7. Тестирование;
+To deploy with Heroku, visit [official guide page](https://devcenter.heroku.com/articles/git).
 
-Шаги 4-7 повторяются до стадии MVP, затем следует релиз приложения. После этого проект развивается в сторону расширения функциональности.
+Briefly:
 
-### Продвижение проекта
+```
+$ heroku login
+Enter your Heroku credentials.
+$ heroku create
+$ git push heroku master
+```
 
-1) Создание и ведение групп в соц. сетях (VK, FB, Instagram);
+Ensure the app is running.
 
-1.1. Сотрудничесто с музеями, Министерством спорта и туризма;
+```
+heroku ps:scale web=1
+heroku open
+```
 
-2) Создание блога в веб-версии приложения;
+## Built With
 
-3) Конкурсы;
+- [Node.js](https://github.com/nodejs/node)  - JavaScript runtime for server;
+- [npm](https://github.com/npm/npm)  - Package manager for JavaScript;
+- [Express.js](https://github.com/expressjs/express)  - Framework for Node.js.
 
-4) Рекламные компании в соц. сетях;
+### Deployment
 
-5) Реклама в тематических пабликах, у инфлюэнсеров (при привлечении инвестиций);
+- [Heroku](https://www.heroku.com/home)  - Deployment platform for testing needs.
 
-## Команда
+### Database
 
-* **Егор Пуйша** - [GitStearis](https://github.com/GitStearis) - автор идеи, Full-stack Development;
-* **Артем Дадыченко** - [ArtemDadychenko](https://github.com/ArtemDadychenko) - Front-end Developer;
+- [MongoDB](https://www.mongodb.com/)  - NoSQL Database;
+- [Mongoose](http://mongoosejs.com/)  - ODM for MongoDB.
+
+## Hints
+
+Some advices that can save your time :bulb:
+
+* Your project should provide a [Procfile](https://devcenter.heroku.com/articles/getting-started-with-nodejs#define-a-procfile) when you deploy to Heroku.
+
+## Active team
+
+* **Егор Пуйша** - [GitStearis](https://github.com/GitStearis) - Author, Full-stack Development;
+* **Артем Дадыченко** - [ArtemDadychenko](https://github.com/ArtemDadychenko) - Front-end Developer.
+
+### Inactive people & former participants
+
 * **Даниил Чернышев** - [des1nteresado](https://github.com/des1nteresado) - Back-end Developer;
-* **Анастасия Бируля** - дизайнер;
-* **Егор Сулицкий** - маркетолог.
+* **Анастасия Бируля** - Designer;
+* **Егор Сулицкий** - Marketer.
