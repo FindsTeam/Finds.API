@@ -24,7 +24,6 @@
         "express": "^4.16.2",
         "express-jwt": "^5.3.1",
         "express-jwt-authz": "^1.0.0",
-        "faker": "4.1.0",
         "jwks-rsa": "^1.2.1",
         "jwt-decode": "2.2.0",
         "mocha": "5.1.1",
@@ -32,8 +31,6 @@
         "mongoose": "^5.0.7",
         "needle": "^2.2.0",
         "nodemon": "1.17.4",
-        "random-latitude": "1.0.1",
-        "random-longitude": "1.0.1",
         "should": "13.2.1",
         "socket.io": "2.1.0"
     }

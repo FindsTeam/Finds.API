@@ -2,13 +2,11 @@ require("dotenv").config();
 
 const app = require("express")();
 const server = require("http").Server(app);
-const io = require("socket.io")(server);
 const bodyParser = require("body-parser");
 
 const routesApi = require("./app/routes/index");
 const checkJwt = require("./app/middleware/jwt");
 const database = require("./app/mongoose");
-const chatApi = require("./app/routes/chat");
 
 database.connect();
 
@@ -27,5 +25,3 @@ app.use((req, res, next) => {
 app.use("/api", routesApi);
 
 server.listen(process.env.PORT);
-
-io.on("connection", (socket) => chatApi(socket));
