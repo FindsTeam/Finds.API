@@ -5,8 +5,10 @@ mongoose.Promise = Promise;
 const marker = new mongoose.Schema({
     title: {
         type: String,
-        unique: true,
-        required: true
+        required: true,
+        index: {
+            unique: false
+        }
     },
     location: {
         type: [Number],
@@ -15,32 +17,38 @@ const marker = new mongoose.Schema({
             sparse: true
         }
     },
-    zoom: {
-        type: Number,
-        required: false
-    },
     type: {
-        type: String,
+        type: [String],
         required: false
     },
     description: {
         type: String,
         required: false
     },
-    adress: {
-        type: String,
+    creationDate: {
+        type: Date,
+        default: Date.now,
+        required: true
+    },
+    startDate: {
+        type: Date,
+        default: Date.now,
+        required: true
+    },
+    endDate: {
+        type: Date,
         required: false
     },
-    time: {
+    author: {
         type: String,
-        required: false
+        required: true
     },
-    img: {
+    placeId: {
         type: String,
-        required: false
+        required: true
     },
-    date: {
-        type: String,
+    reviews: {
+        type: [Object],
         required: false
     }
 });
