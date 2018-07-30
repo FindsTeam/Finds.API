@@ -10,7 +10,7 @@ const database = require("./app/mongoose");
 
 database.connect();
 
-app.use(checkJwt);
+// app.use(checkJwt);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
