@@ -18,6 +18,7 @@ router.get("/user/:nickname", userController.getUserByName);
 
 // feedback
 router.post("/feedback", feedbackController.createFeedback);
+router.get("/feedback", feedbackController.getFeedback);
 
 // markers CRUD
 router.get("/marker/:id", markerController.getMarkerById);

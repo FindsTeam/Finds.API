@@ -37,3 +37,15 @@ module.exports.createFeedback = (req, res) => {
         return res.status(400).json({ message: "Required fields not filled" })
     }
 }
+
+module.exports.getFeedback = (req, res) => {
+    Feedback.find()
+    .limit(100)
+    .exec((err, feedback) => {
+        if (err) {
+            return res.status(500);
+        } else {
+            return res.status(200).json(feedback);
+        }
+    })
+}
