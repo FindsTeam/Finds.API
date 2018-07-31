@@ -124,7 +124,7 @@ module.exports.recentMarkersByIdToken = (req, res) => {
             Markers.find({ "_id": { "$in": user.foundFreebies } })
                 .sort("-date")
                 .limit(parseInt(req.params.amount, 10))
-                .exec((error, markers) => {
+                .exec((err, markers) => {
                     if (err) {
                         return res.status(500).json({ message: "Can't find recent freebees by this user." });
                     } else {

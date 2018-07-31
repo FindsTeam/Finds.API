@@ -6,6 +6,7 @@ const markerController = require("../controllers/markers");
 const placeController = require("../controllers/places");
 const userController = require("../controllers/users");
 const typeController = require("../controllers/types");
+const feedbackController = require("../controllers/feedback");
 
 router.get("/login/:idToken", loginController.login);
 
@@ -14,6 +15,10 @@ router.get("/profile/:idToken", userController.getProfileByIdToken);
 router.put("/profile/:idToken", userController.updateProfileByIdToken);
 // users
 router.get("/user/:nickname", userController.getUserByName);
+
+// feedback
+router.post("/feedback", feedbackController.createFeedback);
+router.get("/feedback", feedbackController.getFeedback);
 
 // markers CRUD
 router.get("/marker/:id", markerController.getMarkerById);
