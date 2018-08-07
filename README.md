@@ -38,22 +38,13 @@ Install all dependencies.
 $ npm install
 ```
 
-To launch Freebee API you should create `.env` file in a root directory. File should contain:
+If you want to replace the standard application configurations, then you can create a file `local.json` in `config` folder and write in it only those values that you want to overwrite.
 
-```
-PORT = 3000
-MONGODB_CONNECTION = 
-GOOGLE_API_KEY = 
-AUTH0_DOMAIN = 
-AUTH0_API_IDENTIFIER = 
-```
+* `google.apiKey` - an [API key](https://developers.google.com/maps/documentation/embed/get-api-key) using here to provide information about landmarks via Google Places;
+* `auth0.domain` - Auth0's server location, could be found [here](https://manage.auth0.com/#/applications);
+* `auth0.apiIdentifier` - friendly name for app API, could be changed in [APIs](https://manage.auth0.com/#/apis) tab of Auth0 Dashboard.
 
-* `MONGODB_CONNECTION` - a MongoDB [connection string](https://docs.mongodb.com/manual/reference/connection-string/) with credentials;
-* `GOOGLE_API_KEY` - an [API key](https://developers.google.com/maps/documentation/embed/get-api-key) using here to provide information about landmarks via Google Places;
-* `AUTH0_DOMAIN` - Auth0's server location, could be found [here](https://manage.auth0.com/#/applications);
-* `AUTH0_API_IDENTIFIER` - friendly name for app API, could be changed in [APIs](https://manage.auth0.com/#/apis) tab of Auth0 Dashboard.
-
-To run server on localhost type  `npm start`  in root folder.
+To run server on localhost type `npm start` in root folder.
 
 ```
 $ npm start
