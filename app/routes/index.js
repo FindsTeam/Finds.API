@@ -7,6 +7,7 @@ const placeController = require("../controllers/places");
 const userController = require("../controllers/users");
 const typeController = require("../controllers/types");
 const feedbackController = require("../controllers/feedback");
+const wifisController = require("../controllers/wifi");
 
 router.get("/login/:idToken", loginController.login);
 
@@ -25,6 +26,9 @@ router.get("/marker/:id", markerController.getMarkerById);
 router.post("/marker", markerController.createMarker);
 router.delete("/marker/:idToken/:id", markerController.deleteMarkerById);
 router.put("/marker/:idToken/:id", markerController.updateMarkerById);
+
+// wifis
+router.get("/wifis", wifisController.getWifis);
 
 // markers + users
 router.get("/marker/:idToken/:amount", markerController.recentMarkersByIdToken);
