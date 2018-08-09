@@ -8,6 +8,7 @@ const userController = require("../controllers/users");
 const typeController = require("../controllers/types");
 const feedbackController = require("../controllers/feedback");
 const wifisController = require("../controllers/wifi");
+const toiletsController = require("../controllers/toilets");
 
 router.get("/login/:idToken", loginController.login);
 
@@ -29,6 +30,10 @@ router.put("/marker/:idToken/:id", markerController.updateMarkerById);
 
 // wifis
 router.get("/wifis", wifisController.getWifis);
+
+// toilets
+router.get("/toilets", toiletsController.getToilets);
+router.post("/toilets", toiletsController.createToilets);
 
 // markers + users
 router.get("/marker/:idToken/:amount", markerController.recentMarkersByIdToken);

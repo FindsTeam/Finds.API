@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 mongoose.Promise = Promise;
 
-const wifi = new mongoose.Schema({
+const toilet = new mongoose.Schema({
     title: {
         type: String,
         required: true,
@@ -35,12 +35,8 @@ const wifi = new mongoose.Schema({
         type: String,
         required: true,
     },
-    password: {
-        type: String,
-        required: false,
-    },
 });
 
-wifi.index({ loc: "2dsphere" });
+toilet.index({ loc: "2dsphere" });
 
-module.exports = mongoose.model("wifis", wifi);
+module.exports = mongoose.model("toilets", toilet);
