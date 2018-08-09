@@ -60,3 +60,6 @@ typings/
 # configs
 config.js
 
+.idea/
+package-lock.json
+config/local.json

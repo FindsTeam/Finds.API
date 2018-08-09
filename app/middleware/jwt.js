@@ -1,3 +1,6 @@
+// noinspection JSValidateTypes
+/** @type AppConfig */
+const config = require("config");
 const jwt = require("express-jwt");
 const jwks = require("jwks-rsa");
 
@@ -6,10 +9,10 @@ const checkJwt = jwt({
         cache: true,
         rateLimit: true,
         jwksRequestsPerMinute: 5,
-        jwksUri: `${process.env.AUTH0_DOMAIN}.well-known/jwks.json`
+        jwksUri: `${config.auth0.domain}.well-known/jwks.json`
     }),
-    aud: process.env.AUTH0_API_IDENTIFIER,
-    issuer: process.env.AUTH0_DOMAIN,
+    aud: config.auth0.apiIdentifier,
+    issuer: config.auth0.domain,
     algorithms: ["RS256"]
 });
 
