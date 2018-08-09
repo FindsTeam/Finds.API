@@ -42,14 +42,12 @@ To launch Freebee API you should create `.env` file in a root directory. File sh
 
 ```
 PORT = 3000
-MONGODB_CONNECTION = 
-GOOGLE_API_KEY = 
+MONGODB_CONNECTION =  
 AUTH0_DOMAIN = 
 AUTH0_API_IDENTIFIER = 
 ```
 
 * `MONGODB_CONNECTION` - a MongoDB [connection string](https://docs.mongodb.com/manual/reference/connection-string/) with credentials;
-* `GOOGLE_API_KEY` - an [API key](https://developers.google.com/maps/documentation/embed/get-api-key) using here to provide information about landmarks via Google Places;
 * `AUTH0_DOMAIN` - Auth0's server location, could be found [here](https://manage.auth0.com/#/applications);
 * `AUTH0_API_IDENTIFIER` - friendly name for app API, could be changed in [APIs](https://manage.auth0.com/#/apis) tab of Auth0 Dashboard.
 
@@ -103,10 +101,11 @@ Some advices that can save your time :bulb:
 ## Active team
 
 * **Егор Пуйша** - [GitStearis](https://github.com/GitStearis) - Author, Full-stack Development;
-* **Артем Дадыченко** - [ArtemDadychenko](https://github.com/ArtemDadychenko) - Front-end Developer.
+* **Артем Дадыченко** - [ArtemDadychenko](https://github.com/ArtemDadychenko) - Front-end Developer;
+* **Егор Сулицкий** - Marketer.
 
 ### Inactive people & former participants
 
 * **Даниил Чернышев** - [des1nteresado](https://github.com/des1nteresado) - Back-end Developer;
-* **Анастасия Бируля** - Designer;
-* **Егор Сулицкий** - Marketer.
+* **Анастасия Бируля** - Designer.
+
