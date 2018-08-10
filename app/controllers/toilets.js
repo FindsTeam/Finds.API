@@ -1,7 +1,7 @@
 const Toilets = require("../models/toilets");
 
-const toiletFromRequest = (toiletFromRequest) => {
-    if (!toiletFromRequest) {
+const toiletMapper = (rawToilet) => {
+    if (!rawToilet) {
         return null;
     }
     const {
@@ -10,17 +10,17 @@ const toiletFromRequest = (toiletFromRequest) => {
         description,
         author,
         address,
-    } = toiletFromRequest;
+    } = rawToilet;
 
     const toilet = new Toilets();
-    toilet.title = title || 'Туалет';
+    toilet.title = title || "Туалет";
     toilet.location = location;
     toilet.description = description || null;
-    toilet.author = author || 'Freebee';
+    toilet.author = author || "Freebee";
     toilet.address = address;
 
     return toilet;
-}
+};
 
 module.exports.getToilets = (req, res) => {
     Toilets.find()
@@ -31,16 +31,16 @@ module.exports.getToilets = (req, res) => {
         } else {
             return res.status(200).json(toilets);
         }
-    })
-}
+    });
+};
 
 module.exports.createToilets = (req, res) => {
     const toilets = req.body.data || [];
-    const transformedToilets = toilets.map(t => toiletFromRequest(t));
+    const transformedToilets = toilets.map((toilet) => toiletMapper(toilet));
 
     Toilets.create(transformedToilets, (err, savedToilets) => {
         if (err) {
-            return res.status(500).json({ message: 'Could not save toilets.' });
+            return res.status(500).json({ message: "Could not save toilets." });
         } else {
             return res.status(201).json(savedToilets);
         }

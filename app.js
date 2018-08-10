@@ -5,12 +5,9 @@ const server = require("http").Server(app);
 const bodyParser = require("body-parser");
 
 const routesApi = require("./app/routes/index");
-const checkJwt = require("./app/middleware/jwt");
 const database = require("./app/mongoose");
 
 database.connect();
-
-// app.use(checkJwt);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

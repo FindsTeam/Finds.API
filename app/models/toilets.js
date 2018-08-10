@@ -34,7 +34,7 @@ const toilet = new mongoose.Schema({
     address: {
         type: String,
         required: true,
-    },
+    }
 });
 
 toilet.index({ loc: "2dsphere" });
