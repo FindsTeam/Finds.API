@@ -9,6 +9,6 @@ module.exports.getWifis = (req, res) => {
         } else {
             return res.status(200).json(wifis);
         }
-    })
-}
+    });
+};
 

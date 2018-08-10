@@ -38,7 +38,7 @@ const wifi = new mongoose.Schema({
     password: {
         type: String,
         required: false,
-    },
+    }
 });
 
 wifi.index({ loc: "2dsphere" });
