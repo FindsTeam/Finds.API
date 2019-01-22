@@ -3,9 +3,20 @@ const mongoose = require("mongoose");
 mongoose.Promise = Promise;
 
 const feedback = new mongoose.Schema({
+    title: {
+        type: String,
+    },
+    location: {
+        type: [Number],
+        required: true,
+        index: {
+            type: "2dsphere",
+            sparse: true
+        }
+    },
     author: {
         type: String,
-        required: false,
+        required: true,
     },
     address: {
         type: String,
@@ -14,6 +25,10 @@ const feedback = new mongoose.Schema({
     type: {
         type: [String],
         required: true,
+    },
+    password: {
+        type: String,
+        required: false
     },
     description: {
         type: String,
