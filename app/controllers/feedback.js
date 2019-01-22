@@ -17,6 +17,22 @@ const feedbackMapper = (body) => {
     return null;
 };
 
+module.exports.getFeedback = (req, res) => {
+    Feedback.find()
+    .limit(100)
+    .exec((err, feedback) => {
+        if (err) {
+            return res.status(500);
+        } else {
+            return res.status(200).json(feedback);
+        }
+    });
+};
+
+module.exports.getFeedbackById = (req, res) => {
+
+};
+
 module.exports.createFeedback = (req, res) => {
     const { address, type } = req.body;
     if (address && type && type.length) {
@@ -35,14 +51,18 @@ module.exports.createFeedback = (req, res) => {
     }
 };
 
-module.exports.getFeedback = (req, res) => {
-    Feedback.find()
-    .limit(100)
-    .exec((err, feedback) => {
-        if (err) {
-            return res.status(500);
-        } else {
-            return res.status(200).json(feedback);
-        }
-    });
+module.exports.approveFeedback = (req, res) => {
+
+};
+
+module.exports.updateFeedback = (req, res) => {
+
+};
+
+module.exports.deleteFeedback = (req, res) => {
+
+};
+
+module.exports.deleteManyFeedback = (req, res) => {
+
 };

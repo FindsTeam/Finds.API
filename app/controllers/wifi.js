@@ -1,14 +1,33 @@
-const Wifis = require("../models/wifis");
+const Wifi = require("../models/wifi");
 
-module.exports.getWifis = (req, res) => {
-    Wifis.find()
+module.exports.getWifi = (req, res) => {
+    Wifi.find()
     .limit(500)
-    .exec((err, wifis) => {
+    .exec((err, wifi) => {
         if (err) {
             return res.status(500);
         } else {
-            return res.status(200).json(wifis);
+            return res.status(200).json(wifi);
         }
     });
 };
 
+module.exports.getWifiById = (req, res) => {
+
+};
+
+module.exports.createWifi = (req, res) => {
+
+};
+
+module.exports.updateWifi = (req, res) => {
+
+};
+
+module.exports.deleteWifi = (req, res) => {
+
+};
+
+module.exports.deleteManyWifi = (req, res) => {
+
+};

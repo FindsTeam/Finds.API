@@ -34,7 +34,11 @@ module.exports.getToilets = (req, res) => {
     });
 };
 
-module.exports.createToilets = (req, res) => {
+module.exports.getToiletById = (req, res) => {
+
+};
+
+module.exports.createToilet = (req, res) => {
     const toilets = req.body.data || [];
     const transformedToilets = toilets.map((toilet) => toiletMapper(toilet));
 
@@ -46,3 +50,15 @@ module.exports.createToilets = (req, res) => {
         }
     });
 }
+
+module.exports.updateToilet = (req, res) => {
+
+};
+
+module.exports.deleteToilet = (req, res) => {
+
+};
+
+module.exports.deleteManyToilets = (req, res) => {
+
+};
