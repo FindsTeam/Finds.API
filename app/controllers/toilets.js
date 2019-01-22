@@ -1,36 +1,35 @@
-const Toilets = require("../models/toilets");
+const Toilets = require('../models/toilets');
 
 const toiletMapper = (rawToilet) => {
-    if (!rawToilet) {
-        return null;
-    }
-    const {
-        title,
-        location,
-        description,
-        author,
-        address,
-    } = rawToilet;
+  if (!rawToilet) {
+    return null;
+  }
+  const {
+    title,
+    location,
+    description,
+    author,
+    address,
+  } = rawToilet;
 
-    const toilet = new Toilets();
-    toilet.title = title || "Туалет";
-    toilet.location = location;
-    toilet.description = description || null;
-    toilet.author = author || "Freebee";
-    toilet.address = address;
+  const toilet = new Toilets();
+  toilet.title = title || 'Туалет';
+  toilet.location = location;
+  toilet.description = description || null;
+  toilet.author = author || 'Freebee';
+  toilet.address = address;
 
-    return toilet;
+  return toilet;
 };
 
 module.exports.getToilets = (req, res) => {
-    Toilets.find()
+  Toilets.find()
     .limit(500)
     .exec((err, toilets) => {
-        if (err) {
-            return res.status(500);
-        } else {
-            return res.status(200).json(toilets);
-        }
+      if (err) {
+        return res.status(500);
+      }
+      return res.status(200).json(toilets);
     });
 };
 
@@ -39,17 +38,16 @@ module.exports.getToiletById = (req, res) => {
 };
 
 module.exports.createToilet = (req, res) => {
-    const toilets = req.body.data || [];
-    const transformedToilets = toilets.map((toilet) => toiletMapper(toilet));
+  const toilets = req.body.data || [];
+  const transformedToilets = toilets.map(toilet => toiletMapper(toilet));
 
-    Toilets.create(transformedToilets, (err, savedToilets) => {
-        if (err) {
-            return res.status(500).json({ message: "Could not save toilets." });
-        } else {
-            return res.status(201).json(savedToilets);
-        }
-    });
-}
+  Toilets.create(transformedToilets, (err, savedToilets) => {
+    if (err) {
+      return res.status(500).json({ message: 'Could not save toilets.' });
+    }
+    return res.status(201).json(savedToilets);
+  });
+};
 
 module.exports.updateToilet = (req, res) => {
 

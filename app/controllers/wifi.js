@@ -1,14 +1,13 @@
-const Wifi = require("../models/wifi");
+const Wifi = require('../models/wifi');
 
 module.exports.getWifi = (req, res) => {
-    Wifi.find()
+  Wifi.find()
     .limit(500)
     .exec((err, wifi) => {
-        if (err) {
-            return res.status(500);
-        } else {
-            return res.status(200).json(wifi);
-        }
+      if (err) {
+        return res.status(500);
+      }
+      return res.status(200).json(wifi);
     });
 };
 
