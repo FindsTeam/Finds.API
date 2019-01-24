@@ -34,7 +34,15 @@ module.exports.getToilets = (req, res) => {
 };
 
 module.exports.getToiletById = (req, res) => {
+  const { id } = req.params;
 
+  Toilets.findById(id, (err, toilet) => {
+    if (err) {
+      return res.status(500);
+    }
+
+    return res.status(200).json(toilet);
+  });
 };
 
 module.exports.createToilet = (req, res) => {

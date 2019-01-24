@@ -31,7 +31,15 @@ module.exports.getFeedback = (req, res) => {
 };
 
 module.exports.getFeedbackById = (req, res) => {
+  const { id } = req.params;
 
+  Feedback.findById(id, (err, feedback) => {
+    if (err) {
+      return res.status(500);
+    }
+
+    return res.status(200).json(feedback);
+  });
 };
 
 module.exports.createFeedback = (req, res) => {
