@@ -7,7 +7,8 @@ module.exports.getWifi = (req, res) => {
       if (err) {
         return res.status(500);
       }
-      return res.status(200).json(wifi);
+
+      return res.status(200).json(wifi.map(w => w.toClient()));
     });
 };
 
@@ -19,7 +20,7 @@ module.exports.getWifiById = (req, res) => {
       return res.status(500);
     }
 
-    return res.status(200).json(wifi);
+    return res.status(200).json(wifi.toClient());
   });
 };
 
@@ -45,18 +46,59 @@ module.exports.createWifi = (req, res) => {
       return res.status(500);
     }
 
-    return res.status(201).json(createdWifi);
+    return res.status(201).json(createdWifi.toClient());
   });
 };
 
 module.exports.updateWifi = (req, res) => {
+  const {
+    id,
+    title,
+    location,
+    description,
+    author,
+    address,
+    password,
+  } = req.body;
 
+  Wifi.findByIdAndUpdate(id, {
+    title,
+    location,
+    description,
+    author,
+    address,
+    password,
+  }, (err, wifi) => {
+    if (err) {
+      return res.status(500);
+    }
+
+    return res.status(200).json(wifi.toClient());
+  });
 };
 
 module.exports.deleteWifi = (req, res) => {
+  const { id } = req.params;
 
+  Wifi.findByIdAndDelete(id, (err) => {
+    if (err) {
+      return res.status(500);
+    }
+
+    return res.status(204);
+  });
 };
 
 module.exports.deleteManyWifi = (req, res) => {
+  const ids = req.body;
 
+  Wifi.deleteMany({
+    id: { $in: ids },
+  }, (err) => {
+    if (err) {
+      return res.status(500);
+    }
+
+    return res.status(204);
+  });
 };

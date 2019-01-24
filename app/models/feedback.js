@@ -1,4 +1,7 @@
+/* eslint-disable func-names */
+/* eslint-disable no-underscore-dangle */
 const mongoose = require('mongoose');
+const pointSchema = require('./point');
 
 mongoose.Promise = Promise;
 
@@ -7,12 +10,8 @@ const feedback = new mongoose.Schema({
     type: String,
   },
   location: {
-    type: [Number],
+    type: pointSchema,
     required: true,
-    index: {
-      type: '2dsphere',
-      sparse: true,
-    },
   },
   author: {
     type: String,
@@ -39,6 +38,20 @@ const feedback = new mongoose.Schema({
     default: Date.now,
     required: true,
   },
+}, {
+  collection: 'feedback',
+  versionKey: false,
 });
+
+feedback.method('toClient', function () {
+  const obj = this.toObject();
+
+  obj.id = obj._id;
+  delete obj._id;
+
+  return obj;
+});
+
+feedback.index({ loc: '2dsphere' });
 
 module.exports = mongoose.model('feedback', feedback);

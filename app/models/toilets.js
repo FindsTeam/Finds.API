@@ -1,4 +1,7 @@
+/* eslint-disable func-names */
+/* eslint-disable no-underscore-dangle */
 const mongoose = require('mongoose');
+const pointSchema = require('./point');
 
 mongoose.Promise = Promise;
 
@@ -11,12 +14,8 @@ const toilet = new mongoose.Schema({
     },
   },
   location: {
-    type: [Number],
+    type: pointSchema,
     required: true,
-    index: {
-      type: '2dsphere',
-      sparse: true,
-    },
   },
   description: {
     type: String,
@@ -35,8 +34,18 @@ const toilet = new mongoose.Schema({
     type: String,
     required: true,
   },
+}, {
+  collection: 'toilets',
+  versionKey: false,
 });
 
-toilet.index({ loc: '2dsphere' });
+toilet.method('toClient', function () {
+  const obj = this.toObject();
+
+  obj.id = obj._id;
+  delete obj._id;
+
+  return obj;
+});
 
 module.exports = mongoose.model('toilets', toilet);

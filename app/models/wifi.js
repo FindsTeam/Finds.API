@@ -1,4 +1,7 @@
+/* eslint-disable func-names */
+/* eslint-disable no-underscore-dangle */
 const mongoose = require('mongoose');
+const pointSchema = require('./point');
 
 mongoose.Promise = Promise;
 
@@ -11,12 +14,8 @@ const wifi = new mongoose.Schema({
     },
   },
   location: {
-    type: [Number],
+    type: pointSchema,
     required: true,
-    index: {
-      type: '2dsphere',
-      sparse: true,
-    },
   },
   description: {
     type: String,
@@ -39,8 +38,18 @@ const wifi = new mongoose.Schema({
     type: String,
     required: false,
   },
+}, {
+  collection: 'wifi',
+  versionKey: false,
 });
 
-wifi.index({ loc: '2dsphere' });
+wifi.method('toClient', function () {
+  const obj = this.toObject();
 
-module.exports = mongoose.model('wifis', wifi);
+  obj.id = obj._id;
+  delete obj._id;
+
+  return obj;
+});
+
+module.exports = mongoose.model('wifi', wifi);
