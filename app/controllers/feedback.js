@@ -1,4 +1,5 @@
 const Feedback = require('../models/feedback');
+const { convertPointToGeoJSONPoint } = require('../utils/geo');
 
 module.exports.getFeedback = (req, res) => {
   Feedback.find()
@@ -62,12 +63,14 @@ module.exports.updateFeedback = (req, res) => {
     description,
   } = req.body;
 
-  Feedback.findByIdAndUpdate(id, {
-    location,
+  Feedback.findOneAndUpdate({ _id: id }, {
+    location: convertPointToGeoJSONPoint(location),
     description,
     author,
     address,
-  }, (err, feedback) => {
+  },
+  { new: true },
+  (err, feedback) => {
     if (err) {
       return res.status(500);
     }

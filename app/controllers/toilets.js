@@ -1,26 +1,5 @@
 const Toilets = require('../models/toilets');
-
-const toiletMapper = (rawToilet) => {
-  if (!rawToilet) {
-    return null;
-  }
-  const {
-    title,
-    location,
-    description,
-    author,
-    address,
-  } = rawToilet;
-
-  const toilet = new Toilets();
-  toilet.title = title || 'Туалет';
-  toilet.location = location;
-  toilet.description = description || null;
-  toilet.author = author || 'Freebee';
-  toilet.address = address;
-
-  return toilet;
-};
+const { convertPointToGeoJSONPoint } = require('../utils/geo');
 
 module.exports.getToilets = (req, res) => {
   Toilets.find()
@@ -46,14 +25,26 @@ module.exports.getToiletById = (req, res) => {
 };
 
 module.exports.createToilet = (req, res) => {
-  const toilets = req.body.data || [];
-  const transformedToilets = toilets.map(toilet => toiletMapper(toilet));
+  const {
+    title,
+    location,
+    description,
+    author,
+    address,
+  } = req.body;
 
-  Toilets.create(transformedToilets, (err, savedToilets) => {
+  Toilets.create({
+    title,
+    location: convertPointToGeoJSONPoint(location),
+    description,
+    author,
+    address,
+  }, (err, toilet) => {
     if (err) {
-      return res.status(500).json({ message: 'Could not save toilets.' });
+      return res.status(500);
     }
-    return res.status(201).json(savedToilets.toClient());
+
+    return res.status(201).json(toilet.toClient());
   });
 };
 
@@ -67,13 +58,15 @@ module.exports.updateToilet = (req, res) => {
     address,
   } = req.body;
 
-  Toilets.findByIdAndUpdate(id, {
+  Toilets.findOneAndUpdate({ _id: id }, {
     title,
-    location,
+    location: convertPointToGeoJSONPoint(location),
     description,
     author,
     address,
-  }, (err, toilet) => {
+  },
+  { new: true },
+  (err, toilet) => {
     if (err) {
       return res.status(500);
     }

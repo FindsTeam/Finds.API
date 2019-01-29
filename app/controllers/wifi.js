@@ -1,4 +1,5 @@
 const Wifi = require('../models/wifi');
+const { convertPointToGeoJSONPoint } = require('../utils/geo');
 
 module.exports.getWifi = (req, res) => {
   Wifi.find()
@@ -36,7 +37,7 @@ module.exports.createWifi = (req, res) => {
 
   Wifi.create({
     title,
-    location,
+    location: convertPointToGeoJSONPoint(location),
     description,
     author,
     address,
@@ -61,14 +62,16 @@ module.exports.updateWifi = (req, res) => {
     password,
   } = req.body;
 
-  Wifi.findByIdAndUpdate(id, {
+  Wifi.findOneAndUpdate({ _id: id }, {
     title,
-    location,
+    location: convertPointToGeoJSONPoint(location),
     description,
     author,
     address,
     password,
-  }, (err, wifi) => {
+  },
+  { new: true },
+  (err, wifi) => {
     if (err) {
       return res.status(500);
     }
