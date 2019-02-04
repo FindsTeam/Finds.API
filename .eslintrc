@@ -1,0 +1,22 @@
+{
+  "env": {
+    "node": true,
+    "es6": true
+  },
+  "root": true,
+  "extends": [
+    "eslint:recommended",
+    "airbnb-base",
+    "plugin:node/recommended"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 2017,
+    "ecmaFeatures": {
+      "spread": true,
+      "experimentalObjectRestSpread": true
+    }
+  },
+  "rules": {
+    "linebreak-style": "off"
+  }
+}

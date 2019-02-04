@@ -5,29 +5,17 @@ const pointSchema = require('./point');
 
 mongoose.Promise = Promise;
 
-const feedback = new mongoose.Schema({
+const wifi = new mongoose.Schema({
   title: {
     type: String,
+    required: true,
+    index: {
+      unique: false,
+    },
   },
   location: {
     type: pointSchema,
     required: true,
-  },
-  author: {
-    type: String,
-    required: true,
-  },
-  address: {
-    type: String,
-    required: true,
-  },
-  type: {
-    type: [String],
-    required: true,
-  },
-  password: {
-    type: String,
-    required: false,
   },
   description: {
     type: String,
@@ -38,12 +26,24 @@ const feedback = new mongoose.Schema({
     default: Date.now,
     required: true,
   },
+  author: {
+    type: String,
+    required: false,
+  },
+  address: {
+    type: String,
+    required: true,
+  },
+  password: {
+    type: String,
+    required: false,
+  },
 }, {
-  collection: 'feedback',
+  collection: 'wifi',
   versionKey: false,
 });
 
-feedback.method('toClient', function () {
+wifi.method('toClient', function () {
   const obj = this.toObject();
 
   obj.id = obj._id;
@@ -52,6 +52,4 @@ feedback.method('toClient', function () {
   return obj;
 });
 
-feedback.index({ loc: '2dsphere' });
-
-module.exports = mongoose.model('feedback', feedback);
+module.exports = mongoose.model('wifi', wifi);
