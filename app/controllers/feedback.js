@@ -1,5 +1,4 @@
 const Feedback = require('../models/feedback');
-const { freebeeTypesModels } = require('../utils/freebeeTypes');
 const { convertPointToGeoJSONPoint } = require('../utils/geo');
 
 module.exports.getFeedback = (req, res) => {
@@ -53,22 +52,7 @@ module.exports.createFeedback = (req, res) => {
   });
 };
 
-module.exports.approveFeedback = (req, res) => {
-  const { type } = req.body;
-
-  const MarkerModel = Object.values(freebeeTypesModels)
-    .find(freebeeType => freebeeType === type).model;
-
-  const marker = new MarkerModel({ ...req.body });
-  console.log('marker');
-  console.log(marker);
-
-  // marker.save((marker, error) => {
-
-  // });
-
-  return res.status(403);
-};
+module.exports.approveFeedback = (req, res) => res.status(403);
 
 module.exports.updateFeedback = (req, res) => {
   const {
