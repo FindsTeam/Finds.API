@@ -98,14 +98,7 @@ Some advices that can save your time :bulb:
 
 * Your project should provide a [Procfile](https://devcenter.heroku.com/articles/getting-started-with-nodejs#define-a-procfile) when you deploy to Heroku.
 
-## Active team
+## Developed by
 
-* **Егор Пуйша** - [GitStearis](https://github.com/GitStearis) - Author, Full-stack Development;
-* **Артем Дадыченко** - [ArtemDadychenko](https://github.com/ArtemDadychenko) - Front-end Developer;
-* **Егор Сулицкий** - Marketer.
-
-### Inactive people & former participants
-
-* **Даниил Чернышев** - [des1nteresado](https://github.com/des1nteresado) - Back-end Developer;
-* **Анастасия Бируля** - Designer.
-
+* **Егор Пуйша** - [GitStearis](https://github.com/GitStearis);
+* **Артем Дадыченко** - [ArtemDadychenko](https://github.com/ArtemDadychenko);

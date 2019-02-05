@@ -1,7 +1,14 @@
+const { check } = require('express-validator/check');
+const { getValidationState } = require('../utils/validationHelper');
 const Wifi = require('../models/wifi');
 const { convertPointToGeoJSONPoint } = require('../utils/geo');
 
-module.exports.getWifi = (req, res) => {
+exports.getWifi = function getWifi(req, res) {
+  const state = getValidationState(req);
+  if (state.hasErrors) {
+    return res.status(401).json({ errors: state.errors });
+  }
+
   Wifi.find()
     .limit(500)
     .exec((err, wifi) => {
@@ -13,7 +20,12 @@ module.exports.getWifi = (req, res) => {
     });
 };
 
-module.exports.getWifiById = (req, res) => {
+exports.getWifiById = function getWifiById(req, res) {
+  const state = getValidationState(req);
+  if (state.hasErrors) {
+    return res.status(401).json({ errors: state.errors });
+  }
+
   const { id } = req.params;
 
   Wifi.findById(id, (err, wifi) => {
@@ -25,7 +37,12 @@ module.exports.getWifiById = (req, res) => {
   });
 };
 
-module.exports.createWifi = (req, res) => {
+exports.createWifi = function createWifi(req, res) {
+  const state = getValidationState(req);
+  if (state.hasErrors) {
+    return res.status(401).json({ errors: state.errors });
+  }
+
   const {
     title,
     location,
@@ -51,7 +68,12 @@ module.exports.createWifi = (req, res) => {
   });
 };
 
-module.exports.updateWifi = (req, res) => {
+exports.updateWifi = function updateWifi(req, res) {
+  const state = getValidationState(req);
+  if (state.hasErrors) {
+    return res.status(401).json({ errors: state.errors });
+  }
+
   const {
     id,
     title,
@@ -80,7 +102,12 @@ module.exports.updateWifi = (req, res) => {
   });
 };
 
-module.exports.deleteWifi = (req, res) => {
+exports.deleteWifi = function deleteWifi(req, res) {
+  const state = getValidationState(req);
+  if (state.hasErrors) {
+    return res.status(401).json({ errors: state.errors });
+  }
+
   const { id } = req.params;
 
   Wifi.findByIdAndDelete(id, (err) => {
@@ -92,8 +119,13 @@ module.exports.deleteWifi = (req, res) => {
   });
 };
 
-module.exports.deleteManyWifi = (req, res) => {
-  const ids = req.body;
+exports.deleteManyWifi = function deleteManyWifi(req, res) {
+  const state = getValidationState(req);
+  if (state.hasErrors) {
+    return res.status(401).json({ errors: state.errors });
+  }
+
+  const { ids } = req.body;
 
   Wifi.deleteMany({
     id: { $in: ids },
@@ -104,4 +136,56 @@ module.exports.deleteManyWifi = (req, res) => {
 
     return res.status(204);
   });
+};
+
+exports.validate = (method) => {
+  switch (method) {
+    case exports.getWifi.name: {
+      return [];
+    }
+    case exports.getWifiById.name: {
+      return [
+        check('id').exists().isMongoId(),
+      ];
+    }
+    case exports.createWifi.name: {
+      return [
+        check('title').exists(),
+        check('location').exists().isArray().isLength({ min: 2, max: 2 }),
+        check('author').optional().isString().not()
+          .isEmpty(),
+        check('address').exists().isString().not()
+          .isEmpty(),
+        check('password').optional().isString().isLength({ min: 8 }),
+        check('description').optional().isString(),
+      ];
+    }
+    case exports.updateWifi.name: {
+      return [
+        check('id').exists().isMongoId(),
+        check('title').exists(),
+        check('location').exists().isArray().isLength({ min: 2, max: 2 }),
+        check('author').optional().isString().not()
+          .isEmpty(),
+        check('address').exists().isString().not()
+          .isEmpty(),
+        check('password').optional().isString().isLength({ min: 8 }),
+        check('description').optional().isString(),
+      ];
+    }
+    case exports.deleteWifi.name: {
+      return [
+        check('id').exists().isMongoId(),
+      ];
+    }
+    case exports.deleteManyWifi.name: {
+      return [
+        check('ids').exists().isArray().isLength({ min: 1 }),
+      ];
+    }
+
+    default: {
+      return [];
+    }
+  }
 };
