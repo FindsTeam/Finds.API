@@ -56,31 +56,16 @@ module.exports.createFeedback = (req, res) => {
 module.exports.approveFeedback = (req, res) => {
   const { type } = req.body;
 
-  if (!type || type.length === 0) {
-    return res.status(401);
-  }
-
-  const firstType = parseInt(type[0], 10);
-
-  // eslint-disable-next-line no-restricted-globals
-  if (isNaN(firstType)) {
-    return res.status(401);
-  }
-
-  const freebeeTypeWithModel = Object.values(freebeeTypesModels)
-    .find(typeModel => typeModel.type === firstType);
-
-  const MarkerModel = freebeeTypeWithModel.model;
+  const MarkerModel = Object.values(freebeeTypesModels)
+    .find(freebeeType => freebeeType === type).model;
 
   const marker = new MarkerModel({ ...req.body });
+  console.log('marker');
+  console.log(marker);
 
-  marker.save((createdMarker, err) => {
-    if (err) {
-      return res.status(500);
-    }
+  // marker.save((marker, error) => {
 
-    return res.status(201).json(createdMarker.toClient());
-  });
+  // });
 
   return res.status(403);
 };
