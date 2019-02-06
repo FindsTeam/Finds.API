@@ -3,6 +3,7 @@ require('dotenv').config();
 const app = require('express')();
 const server = require('http').Server(app);
 const bodyParser = require('body-parser');
+const expressValidator = require('express-validator');
 
 const routesApi = require('./app/routes/index');
 const database = require('./app/mongoose');
@@ -19,6 +20,8 @@ app.use((req, res, next) => {
   res.header('Access-Control-Allow-Headers', 'Access-Control-Allow-Headers, Access-Control-Request-Method, Access-Control-Request-Headers, Origin, X-Requested-With, Content-Type, Accept, Authorization');
   next();
 });
+
+// app.use(expressValidator());
 app.use('/api', routesApi);
 
 server.listen(process.env.PORT);

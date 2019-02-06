@@ -1,3 +1,4 @@
+const { check, validationResult } = require('express-validator/check');
 const Feedback = require('../models/feedback');
 const { freebeeTypesModels } = require('../utils/freebeeTypes');
 const { convertPointToGeoJSONPoint } = require('../utils/geo');
@@ -13,11 +14,21 @@ module.exports.getFeedback = (req, res) => {
     });
 };
 
-module.exports.getFeedbackById = (req, res) => {
+module.exports.getFeedbackById = function getFeedbackById(req, res) {
+  console.log('getFeedbackById');
+  const errors = validationResult(req);
+  console.log('errors');
+  console.log(errors.array());
+  if (!errors.isEmpty()) {
+    return res.status(401).json({ errors: errors.array() });
+  }
+  console.log('after validtion');
+
   const { id } = req.params;
 
   Feedback.findById(id, (err, feedback) => {
     if (err) {
+      console.log('some error');
       return res.status(500);
     }
 
@@ -123,7 +134,7 @@ module.exports.deleteFeedback = (req, res) => {
 };
 
 module.exports.deleteManyFeedback = (req, res) => {
-  const ids = req.body;
+  const { ids } = req.body;
 
   Feedback.deleteMany({
     id: { $in: ids },
@@ -134,4 +145,72 @@ module.exports.deleteManyFeedback = (req, res) => {
 
     return res.status(204);
   });
+};
+
+module.exports.validate = (method) => {
+  console.log('validate');
+  console.log(method);
+
+
+  switch (method) {
+    case exports.getFeedback.name: {
+      return [];
+    }
+    case exports.getFeedbackById.name: {
+      console.log('valid get by id');
+      return [
+        check('id').exists().isMongoId(),
+      ];
+    }
+    case exports.createFeedback.name: {
+      return [
+        check('title').optional(),
+        check('location').exists().isArray().isLength({ min: 2, max: 2 }),
+        check('author').exists().isString().not()
+          .isEmpty(),
+        check('address').exists().isString().not()
+          .isEmpty(),
+        check('type').exists().isArray().isLength({ min: 1 }),
+        check('password').optional().isString().isLength({ min: 8 }),
+        check('description').optional(),
+      ];
+    }
+    case exports.approveFeedback.name: {
+      return [
+        check('type').exists().isArray().isLength({ min: 1 }),
+        check('id').exists().isMongoId(),
+        check('location').exists().isArray().isLength({ min: 2, max: 2 }),
+        check('author').exists().isString(),
+        check('address').exists().isString().not()
+          .isEmpty(),
+        check('password').optional().isString().isLength({ min: 8 }),
+        check('description').optional(),
+      ];
+    }
+    case exports.updateFeedback.name: {
+      return [
+        check('id').exists().isMongoId(),
+        check('location').exists().isArray().isLength({ min: 2, max: 2 }),
+        check('author').exists().isString().not()
+          .isEmpty(),
+        check('address').exists().isString().not()
+          .isEmpty(),
+        check('type').exists().isArray().isLength({ min: 1 }),
+      ];
+    }
+    case exports.deleteFeedback.name: {
+      return [
+        check('id').exists().isMongoId(),
+      ];
+    }
+    case exports.deleteManyFeedback.name: {
+      return [
+        check('ids').exists().isArray().isLength({ min: 1 }),
+      ];
+    }
+
+    default: {
+      return [];
+    }
+  }
 };
