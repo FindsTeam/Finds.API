@@ -1,9 +1,15 @@
-const { check, validationResult } = require('express-validator/check');
+const { check } = require('express-validator/check');
+const { getValidationState } = require('../utils/validationHelper');
 const Feedback = require('../models/feedback');
 const { freebeeTypesModels } = require('../utils/freebeeTypes');
 const { convertPointToGeoJSONPoint } = require('../utils/geo');
 
-exports.getFeedback = (req, res) => {
+exports.getFeedback = function getFeedback(req, res) {
+  const state = getValidationState(req);
+  if (state.hasErrors) {
+    return res.status(401).json({ errors: state.errors });
+  }
+
   Feedback.find()
     .limit(100)
     .exec((err, feedback) => {
@@ -15,9 +21,9 @@ exports.getFeedback = (req, res) => {
 };
 
 exports.getFeedbackById = function getFeedbackById(req, res) {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(401).json({ errors: errors.array() });
+  const state = getValidationState(req);
+  if (state.hasErrors) {
+    return res.status(401).json({ errors: state.errors });
   }
 
   const { id } = req.params;
@@ -32,9 +38,9 @@ exports.getFeedbackById = function getFeedbackById(req, res) {
 };
 
 exports.createFeedback = function createFeedback(req, res) {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(401).json({ errors: errors.array() });
+  const state = getValidationState(req);
+  if (state.hasErrors) {
+    return res.status(401).json({ errors: state.errors });
   }
 
   const {
@@ -65,9 +71,9 @@ exports.createFeedback = function createFeedback(req, res) {
 };
 
 exports.approveFeedback = function approveFeedback(req, res) {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(401).json({ errors: errors.array() });
+  const state = getValidationState(req);
+  if (state.hasErrors) {
+    return res.status(401).json({ errors: state.errors });
   }
 
   const { type } = req.body;
@@ -95,9 +101,9 @@ exports.approveFeedback = function approveFeedback(req, res) {
 };
 
 module.exports.updateFeedback = function updateFeedback(req, res) {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(401).json({ errors: errors.array() });
+  const state = getValidationState(req);
+  if (state.hasErrors) {
+    return res.status(401).json({ errors: state.errors });
   }
 
   const {
@@ -125,9 +131,9 @@ module.exports.updateFeedback = function updateFeedback(req, res) {
 };
 
 exports.deleteFeedback = function deleteFeedback(req, res) {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(401).json({ errors: errors.array() });
+  const state = getValidationState(req);
+  if (state.hasErrors) {
+    return res.status(401).json({ errors: state.errors });
   }
 
   const { id } = req.params;
@@ -142,9 +148,9 @@ exports.deleteFeedback = function deleteFeedback(req, res) {
 };
 
 exports.deleteManyFeedback = function deleteManyFeedback(req, res) {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(401).json({ errors: errors.array() });
+  const state = getValidationState(req);
+  if (state.hasErrors) {
+    return res.status(401).json({ errors: state.errors });
   }
 
   const { ids } = req.body;

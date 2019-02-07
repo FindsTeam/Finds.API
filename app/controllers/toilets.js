@@ -1,8 +1,14 @@
-const { check, validationResult } = require('express-validator/check');
+const { check } = require('express-validator/check');
+const { getValidationState } = require('../utils/validationHelper');
 const Toilets = require('../models/toilets');
 const { convertPointToGeoJSONPoint } = require('../utils/geo');
 
 exports.getToilets = function getToilets(req, res) {
+  const state = getValidationState(req);
+  if (state.hasErrors) {
+    return res.status(401).json({ errors: state.errors });
+  }
+
   Toilets.find()
     .limit(500)
     .exec((err, toilets) => {
@@ -14,6 +20,11 @@ exports.getToilets = function getToilets(req, res) {
 };
 
 exports.getToiletById = function getToiletById(req, res) {
+  const state = getValidationState(req);
+  if (state.hasErrors) {
+    return res.status(401).json({ errors: state.errors });
+  }
+
   const { id } = req.params;
 
   Toilets.findById(id, (err, toilet) => {
@@ -26,6 +37,11 @@ exports.getToiletById = function getToiletById(req, res) {
 };
 
 exports.createToilet = function createToilet(req, res) {
+  const state = getValidationState(req);
+  if (state.hasErrors) {
+    return res.status(401).json({ errors: state.errors });
+  }
+
   const {
     title,
     location,
@@ -50,6 +66,11 @@ exports.createToilet = function createToilet(req, res) {
 };
 
 exports.updateToilet = function updateToilet(req, res) {
+  const state = getValidationState(req);
+  if (state.hasErrors) {
+    return res.status(401).json({ errors: state.errors });
+  }
+
   const {
     id,
     title,
@@ -77,6 +98,11 @@ exports.updateToilet = function updateToilet(req, res) {
 };
 
 exports.deleteToilet = function deleteToilet(req, res) {
+  const state = getValidationState(req);
+  if (state.hasErrors) {
+    return res.status(401).json({ errors: state.errors });
+  }
+
   const { id } = req.params;
 
   Toilets.findByIdAndDelete(id, (err) => {
@@ -89,6 +115,11 @@ exports.deleteToilet = function deleteToilet(req, res) {
 };
 
 exports.deleteManyToilets = function deleteManyToilets(req, res) {
+  const state = getValidationState(req);
+  if (state.hasErrors) {
+    return res.status(401).json({ errors: state.errors });
+  }
+
   const { ids } = req.body;
 
   Toilets.deleteMany({
