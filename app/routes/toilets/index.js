@@ -14,10 +14,15 @@ const {
 } = require('../../controllers/toilets');
 
 router.get('/', validate(getToilets.name), getToilets);
+
 router.get('/:id', validate(getToiletById.name), getToiletById);
+
 router.post('/', validate(createToilet.name), createToilet);
+
 router.put('/', validate(updateToilet.name), updateToilet);
+
 router.delete('/:id', validate(deleteToilet.name), deleteToilet);
+
 router.post('/delete', validate(deleteManyToilets.name), deleteManyToilets);
 
 module.exports = router;

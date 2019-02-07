@@ -151,7 +151,7 @@ exports.validate = (method) => {
           .isEmpty(),
         check('address').exists().isString().not()
           .isEmpty(),
-        check('description').optional(),
+        check('description').optional().isString(),
       ];
     }
     case exports.updateToilet.name: {
@@ -159,11 +159,11 @@ exports.validate = (method) => {
         check('id').exists().isMongoId(),
         check('title').optional(),
         check('location').exists().isArray().isLength({ min: 2, max: 2 }),
-        check('author').exists().isString().not()
+        check('author').optional().isString().not()
           .isEmpty(),
         check('address').exists().isString().not()
           .isEmpty(),
-        check('description').optional(),
+        check('description').optional().isString(),
       ];
     }
     case exports.deleteToilet.name: {
