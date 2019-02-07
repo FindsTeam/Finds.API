@@ -29,8 +29,6 @@ exports.getFeedbackById = function getFeedbackById(req, res) {
 
     return res.status(200).json(feedback.toClient());
   });
-
-  return res.status(500);
 };
 
 exports.createFeedback = function createFeedback(req, res) {
@@ -64,17 +62,15 @@ exports.createFeedback = function createFeedback(req, res) {
 
     return res.status(201).json(feedback.toClient());
   });
-
-  return res.status(500);
 };
 
 exports.approveFeedback = function approveFeedback(req, res) {
-  const { type } = req.body;
-
-  if (!type || type.length === 0) {
-    return res.status(401);
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(401).json({ errors: errors.array() });
   }
 
+  const { type } = req.body;
   const firstType = parseInt(type[0], 10);
 
   // eslint-disable-next-line no-restricted-globals
@@ -96,11 +92,14 @@ exports.approveFeedback = function approveFeedback(req, res) {
 
     return res.status(201).json(createdMarker.toClient());
   });
-
-  return res.status(403);
 };
 
 module.exports.updateFeedback = function updateFeedback(req, res) {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(401).json({ errors: errors.array() });
+  }
+
   const {
     id,
     address,
@@ -126,6 +125,11 @@ module.exports.updateFeedback = function updateFeedback(req, res) {
 };
 
 exports.deleteFeedback = function deleteFeedback(req, res) {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(401).json({ errors: errors.array() });
+  }
+
   const { id } = req.params;
 
   Feedback.findByIdAndDelete(id, (err) => {
@@ -138,6 +142,11 @@ exports.deleteFeedback = function deleteFeedback(req, res) {
 };
 
 exports.deleteManyFeedback = function deleteManyFeedback(req, res) {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(401).json({ errors: errors.array() });
+  }
+
   const { ids } = req.body;
 
   Feedback.deleteMany({
