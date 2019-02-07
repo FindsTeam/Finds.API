@@ -8,35 +8,37 @@ module.exports.getFeedback = (req, res) => {
     .limit(100)
     .exec((err, feedback) => {
       if (err) {
-        return res.status(500);
+        return res.status(500).json(err);
       }
       return res.status(200).json(feedback.map(f => f.toClient()));
     });
 };
 
 module.exports.getFeedbackById = function getFeedbackById(req, res) {
-  console.log('getFeedbackById');
   const errors = validationResult(req);
-  console.log('errors');
-  console.log(errors.array());
   if (!errors.isEmpty()) {
     return res.status(401).json({ errors: errors.array() });
   }
-  console.log('after validtion');
 
   const { id } = req.params;
 
   Feedback.findById(id, (err, feedback) => {
     if (err) {
-      console.log('some error');
-      return res.status(500);
+      return res.status(500).json(err);
     }
 
     return res.status(200).json(feedback.toClient());
   });
+
+  return res.status(500);
 };
 
-module.exports.createFeedback = (req, res) => {
+module.exports.createFeedback = function createFeedback(req, res) {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(401).json({ errors: errors.array() });
+  }
+
   const {
     title,
     location,
@@ -57,14 +59,16 @@ module.exports.createFeedback = (req, res) => {
     description,
   }, (err, feedback) => {
     if (err) {
-      return res.status(500);
+      return res.status(500).json(err);
     }
 
     return res.status(201).json(feedback.toClient());
   });
+
+  return res.status(500);
 };
 
-module.exports.approveFeedback = (req, res) => {
+module.exports.approveFeedback = function approveFeedback(req, res) {
   const { type } = req.body;
 
   if (!type || type.length === 0) {
@@ -96,7 +100,7 @@ module.exports.approveFeedback = (req, res) => {
   return res.status(403);
 };
 
-module.exports.updateFeedback = (req, res) => {
+module.exports.updateFeedback = function updateFeedback(req, res) {
   const {
     id,
     address,
@@ -121,7 +125,7 @@ module.exports.updateFeedback = (req, res) => {
   });
 };
 
-module.exports.deleteFeedback = (req, res) => {
+module.exports.deleteFeedback = function deleteFeedback(req, res) {
   const { id } = req.params;
 
   Feedback.findByIdAndDelete(id, (err) => {
@@ -133,7 +137,7 @@ module.exports.deleteFeedback = (req, res) => {
   });
 };
 
-module.exports.deleteManyFeedback = (req, res) => {
+module.exports.deleteManyFeedback = function deleteManyFeedback(req, res) {
   const { ids } = req.body;
 
   Feedback.deleteMany({
@@ -148,16 +152,11 @@ module.exports.deleteManyFeedback = (req, res) => {
 };
 
 module.exports.validate = (method) => {
-  console.log('validate');
-  console.log(method);
-
-
   switch (method) {
     case exports.getFeedback.name: {
       return [];
     }
     case exports.getFeedbackById.name: {
-      console.log('valid get by id');
       return [
         check('id').exists().isMongoId(),
       ];
