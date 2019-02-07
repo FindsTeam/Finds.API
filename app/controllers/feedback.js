@@ -3,7 +3,7 @@ const Feedback = require('../models/feedback');
 const { freebeeTypesModels } = require('../utils/freebeeTypes');
 const { convertPointToGeoJSONPoint } = require('../utils/geo');
 
-module.exports.getFeedback = (req, res) => {
+exports.getFeedback = (req, res) => {
   Feedback.find()
     .limit(100)
     .exec((err, feedback) => {
@@ -14,7 +14,7 @@ module.exports.getFeedback = (req, res) => {
     });
 };
 
-module.exports.getFeedbackById = function getFeedbackById(req, res) {
+exports.getFeedbackById = function getFeedbackById(req, res) {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(401).json({ errors: errors.array() });
@@ -33,7 +33,7 @@ module.exports.getFeedbackById = function getFeedbackById(req, res) {
   return res.status(500);
 };
 
-module.exports.createFeedback = function createFeedback(req, res) {
+exports.createFeedback = function createFeedback(req, res) {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(401).json({ errors: errors.array() });
@@ -68,7 +68,7 @@ module.exports.createFeedback = function createFeedback(req, res) {
   return res.status(500);
 };
 
-module.exports.approveFeedback = function approveFeedback(req, res) {
+exports.approveFeedback = function approveFeedback(req, res) {
   const { type } = req.body;
 
   if (!type || type.length === 0) {
@@ -125,7 +125,7 @@ module.exports.updateFeedback = function updateFeedback(req, res) {
   });
 };
 
-module.exports.deleteFeedback = function deleteFeedback(req, res) {
+exports.deleteFeedback = function deleteFeedback(req, res) {
   const { id } = req.params;
 
   Feedback.findByIdAndDelete(id, (err) => {
@@ -137,7 +137,7 @@ module.exports.deleteFeedback = function deleteFeedback(req, res) {
   });
 };
 
-module.exports.deleteManyFeedback = function deleteManyFeedback(req, res) {
+exports.deleteManyFeedback = function deleteManyFeedback(req, res) {
   const { ids } = req.body;
 
   Feedback.deleteMany({
@@ -151,7 +151,7 @@ module.exports.deleteManyFeedback = function deleteManyFeedback(req, res) {
   });
 };
 
-module.exports.validate = (method) => {
+exports.validate = (method) => {
   switch (method) {
     case exports.getFeedback.name: {
       return [];
