@@ -2,8 +2,12 @@ const express = require('express');
 
 const router = express.Router();
 
-const markersController = require('../../controllers/markers');
+const {
+  getFreebeeTypes,
 
-router.get('/types', markersController.getFreebeeTypes);
+  validate,
+} = require('../../controllers/markers');
+
+router.get('/types', validate(getFreebeeTypes.name), getFreebeeTypes);
 
 module.exports = router;

@@ -1,31 +1,48 @@
+const { check } = require('express-validator/check');
+const { getValidationState } = require('../utils/validationHelper');
 const Feedback = require('../models/feedback');
 const { freebeeTypesModels } = require('../utils/freebeeTypes');
 const { convertPointToGeoJSONPoint } = require('../utils/geo');
 
-module.exports.getFeedback = (req, res) => {
+exports.getFeedback = function getFeedback(req, res) {
+  const state = getValidationState(req);
+  if (state.hasErrors) {
+    return res.status(401).json({ errors: state.errors });
+  }
+
   Feedback.find()
     .limit(100)
     .exec((err, feedback) => {
       if (err) {
-        return res.status(500);
+        return res.status(500).json(err);
       }
       return res.status(200).json(feedback.map(f => f.toClient()));
     });
 };
 
-module.exports.getFeedbackById = (req, res) => {
+exports.getFeedbackById = function getFeedbackById(req, res) {
+  const state = getValidationState(req);
+  if (state.hasErrors) {
+    return res.status(401).json({ errors: state.errors });
+  }
+
   const { id } = req.params;
 
   Feedback.findById(id, (err, feedback) => {
     if (err) {
-      return res.status(500);
+      return res.status(500).json(err);
     }
 
     return res.status(200).json(feedback.toClient());
   });
 };
 
-module.exports.createFeedback = (req, res) => {
+exports.createFeedback = function createFeedback(req, res) {
+  const state = getValidationState(req);
+  if (state.hasErrors) {
+    return res.status(401).json({ errors: state.errors });
+  }
+
   const {
     title,
     location,
@@ -46,20 +63,20 @@ module.exports.createFeedback = (req, res) => {
     description,
   }, (err, feedback) => {
     if (err) {
-      return res.status(500);
+      return res.status(500).json(err);
     }
 
     return res.status(201).json(feedback.toClient());
   });
 };
 
-module.exports.approveFeedback = (req, res) => {
-  const { type } = req.body;
-
-  if (!type || type.length === 0) {
-    return res.status(401);
+exports.approveFeedback = function approveFeedback(req, res) {
+  const state = getValidationState(req);
+  if (state.hasErrors) {
+    return res.status(401).json({ errors: state.errors });
   }
 
+  const { type } = req.body;
   const firstType = parseInt(type[0], 10);
 
   // eslint-disable-next-line no-restricted-globals
@@ -81,11 +98,14 @@ module.exports.approveFeedback = (req, res) => {
 
     return res.status(201).json(createdMarker.toClient());
   });
-
-  return res.status(403);
 };
 
-module.exports.updateFeedback = (req, res) => {
+module.exports.updateFeedback = function updateFeedback(req, res) {
+  const state = getValidationState(req);
+  if (state.hasErrors) {
+    return res.status(401).json({ errors: state.errors });
+  }
+
   const {
     id,
     address,
@@ -110,7 +130,12 @@ module.exports.updateFeedback = (req, res) => {
   });
 };
 
-module.exports.deleteFeedback = (req, res) => {
+exports.deleteFeedback = function deleteFeedback(req, res) {
+  const state = getValidationState(req);
+  if (state.hasErrors) {
+    return res.status(401).json({ errors: state.errors });
+  }
+
   const { id } = req.params;
 
   Feedback.findByIdAndDelete(id, (err) => {
@@ -122,8 +147,13 @@ module.exports.deleteFeedback = (req, res) => {
   });
 };
 
-module.exports.deleteManyFeedback = (req, res) => {
-  const ids = req.body;
+exports.deleteManyFeedback = function deleteManyFeedback(req, res) {
+  const state = getValidationState(req);
+  if (state.hasErrors) {
+    return res.status(401).json({ errors: state.errors });
+  }
+
+  const { ids } = req.body;
 
   Feedback.deleteMany({
     id: { $in: ids },
@@ -134,4 +164,67 @@ module.exports.deleteManyFeedback = (req, res) => {
 
     return res.status(204);
   });
+};
+
+exports.validate = (method) => {
+  switch (method) {
+    case exports.getFeedback.name: {
+      return [];
+    }
+    case exports.getFeedbackById.name: {
+      return [
+        check('id').exists().isMongoId(),
+      ];
+    }
+    case exports.createFeedback.name: {
+      return [
+        check('title').optional(),
+        check('location').exists().isArray().isLength({ min: 2, max: 2 }),
+        check('author').exists().isString().not()
+          .isEmpty(),
+        check('address').exists().isString().not()
+          .isEmpty(),
+        check('type').exists().isArray().isLength({ min: 1 }),
+        check('password').optional().isString().isLength({ min: 8 }),
+        check('description').optional(),
+      ];
+    }
+    case exports.approveFeedback.name: {
+      return [
+        check('type').exists().isArray().isLength({ min: 1 }),
+        check('id').exists().isMongoId(),
+        check('location').exists().isArray().isLength({ min: 2, max: 2 }),
+        check('author').exists().isString(),
+        check('address').exists().isString().not()
+          .isEmpty(),
+        check('password').optional().isString().isLength({ min: 8 }),
+        check('description').optional(),
+      ];
+    }
+    case exports.updateFeedback.name: {
+      return [
+        check('id').exists().isMongoId(),
+        check('location').exists().isArray().isLength({ min: 2, max: 2 }),
+        check('author').exists().isString().not()
+          .isEmpty(),
+        check('address').exists().isString().not()
+          .isEmpty(),
+        check('type').exists().isArray().isLength({ min: 1 }),
+      ];
+    }
+    case exports.deleteFeedback.name: {
+      return [
+        check('id').exists().isMongoId(),
+      ];
+    }
+    case exports.deleteManyFeedback.name: {
+      return [
+        check('ids').exists().isArray().isLength({ min: 1 }),
+      ];
+    }
+
+    default: {
+      return [];
+    }
+  }
 };
