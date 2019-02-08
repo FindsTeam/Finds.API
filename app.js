@@ -19,6 +19,7 @@ app.use((req, res, next) => {
   res.header('Access-Control-Allow-Headers', 'Access-Control-Allow-Headers, Access-Control-Request-Method, Access-Control-Request-Headers, Origin, X-Requested-With, Content-Type, Accept, Authorization');
   next();
 });
+
 app.use('/api', routesApi);
 
 server.listen(process.env.PORT);
