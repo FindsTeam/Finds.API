@@ -1,5 +1,5 @@
 const { getValidationState } = require('../utils/validationHelper');
-const freebeeTypes = require('../utils/freebeeTypes');
+const { freebeeTypes } = require('../utils/freebeeTypes');
 
 module.exports.getFreebeeTypes = function getFreebeeTypes(req, res) {
   const state = getValidationState(req);
