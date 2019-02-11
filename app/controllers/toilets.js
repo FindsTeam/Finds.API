@@ -6,7 +6,7 @@ const { convertPointToGeoJSONPoint } = require('../utils/geo');
 exports.getToilets = function getToilets(req, res) {
   const state = getValidationState(req);
   if (state.hasErrors) {
-    return res.status(401).json({ errors: state.errors });
+    return res.status(400).json({ errors: state.errors });
   }
 
   Toilets.find()
@@ -22,7 +22,7 @@ exports.getToilets = function getToilets(req, res) {
 exports.getToiletById = function getToiletById(req, res) {
   const state = getValidationState(req);
   if (state.hasErrors) {
-    return res.status(401).json({ errors: state.errors });
+    return res.status(400).json({ errors: state.errors });
   }
 
   const { id } = req.params;
@@ -39,7 +39,7 @@ exports.getToiletById = function getToiletById(req, res) {
 exports.createToilet = function createToilet(req, res) {
   const state = getValidationState(req);
   if (state.hasErrors) {
-    return res.status(401).json({ errors: state.errors });
+    return res.status(400).json({ errors: state.errors });
   }
 
   const {
@@ -68,7 +68,7 @@ exports.createToilet = function createToilet(req, res) {
 exports.updateToilet = function updateToilet(req, res) {
   const state = getValidationState(req);
   if (state.hasErrors) {
-    return res.status(401).json({ errors: state.errors });
+    return res.status(400).json({ errors: state.errors });
   }
 
   const {
@@ -100,7 +100,7 @@ exports.updateToilet = function updateToilet(req, res) {
 exports.deleteToilet = function deleteToilet(req, res) {
   const state = getValidationState(req);
   if (state.hasErrors) {
-    return res.status(401).json({ errors: state.errors });
+    return res.status(400).json({ errors: state.errors });
   }
 
   const { id } = req.params;
@@ -117,13 +117,13 @@ exports.deleteToilet = function deleteToilet(req, res) {
 exports.deleteManyToilets = function deleteManyToilets(req, res) {
   const state = getValidationState(req);
   if (state.hasErrors) {
-    return res.status(401).json({ errors: state.errors });
+    return res.status(400).json({ errors: state.errors });
   }
 
   const { ids } = req.body;
 
   Toilets.deleteMany({
-    id: { $in: ids },
+    _id: { $in: ids },
   }, (err) => {
     if (err) {
       return res.status(500);
@@ -146,7 +146,7 @@ exports.validate = (method) => {
     case exports.createToilet.name: {
       return [
         check('title').optional(),
-        check('location').exists().isArray().isLength({ min: 2, max: 2 }),
+        check('location').exists().isArray(),
         check('author').exists().isString().not()
           .isEmpty(),
         check('address').exists().isString().not()
@@ -158,7 +158,7 @@ exports.validate = (method) => {
       return [
         check('id').exists().isMongoId(),
         check('title').optional(),
-        check('location').exists().isArray().isLength({ min: 2, max: 2 }),
+        check('location').exists().isArray(),
         check('author').optional().isString().not()
           .isEmpty(),
         check('address').exists().isString().not()
@@ -173,7 +173,7 @@ exports.validate = (method) => {
     }
     case exports.deleteManyToilets.name: {
       return [
-        check('ids').exists().isArray().isLength({ min: 1 }),
+        check('ids').exists().isArray(),
       ];
     }
 

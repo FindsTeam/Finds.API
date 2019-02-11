@@ -4,7 +4,7 @@ const { freebeeTypes } = require('../utils/freebeeTypes');
 module.exports.getFreebeeTypes = function getFreebeeTypes(req, res) {
   const state = getValidationState(req);
   if (state.hasErrors) {
-    return res.status(401).json({ errors: state.errors });
+    return res.status(400).json({ errors: state.errors });
   }
 
   const types = Object.values(freebeeTypes);

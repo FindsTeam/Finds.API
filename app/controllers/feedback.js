@@ -7,7 +7,7 @@ const { convertPointToGeoJSONPoint } = require('../utils/geo');
 exports.getFeedback = function getFeedback(req, res) {
   const state = getValidationState(req);
   if (state.hasErrors) {
-    return res.status(401).json({ errors: state.errors });
+    return res.status(400).json({ errors: state.errors });
   }
 
   Feedback.find()
@@ -23,7 +23,7 @@ exports.getFeedback = function getFeedback(req, res) {
 exports.getFeedbackById = function getFeedbackById(req, res) {
   const state = getValidationState(req);
   if (state.hasErrors) {
-    return res.status(401).json({ errors: state.errors });
+    return res.status(400).json({ errors: state.errors });
   }
 
   const { id } = req.params;
@@ -40,7 +40,7 @@ exports.getFeedbackById = function getFeedbackById(req, res) {
 exports.createFeedback = function createFeedback(req, res) {
   const state = getValidationState(req);
   if (state.hasErrors) {
-    return res.status(401).json({ errors: state.errors });
+    return res.status(400).json({ errors: state.errors });
   }
 
   const {
@@ -73,7 +73,7 @@ exports.createFeedback = function createFeedback(req, res) {
 exports.approveFeedback = function approveFeedback(req, res) {
   const state = getValidationState(req);
   if (state.hasErrors) {
-    return res.status(401).json({ errors: state.errors });
+    return res.status(400).json({ errors: state.errors });
   }
 
   const { type } = req.body;
@@ -81,7 +81,7 @@ exports.approveFeedback = function approveFeedback(req, res) {
 
   // eslint-disable-next-line no-restricted-globals
   if (isNaN(firstType)) {
-    return res.status(401);
+    return res.status(400);
   }
 
   const freebeeTypeWithModel = Object.values(freebeeTypesModels)
@@ -89,9 +89,12 @@ exports.approveFeedback = function approveFeedback(req, res) {
 
   const MarkerModel = freebeeTypeWithModel.model;
 
-  const marker = new MarkerModel({ ...req.body });
+  const marker = new MarkerModel({
+    ...req.body,
+    location: convertPointToGeoJSONPoint(req.body.location),
+  });
 
-  marker.save((createdMarker, err) => {
+  marker.save((err, createdMarker) => {
     if (err) {
       return res.status(500);
     }
@@ -103,7 +106,7 @@ exports.approveFeedback = function approveFeedback(req, res) {
 module.exports.updateFeedback = function updateFeedback(req, res) {
   const state = getValidationState(req);
   if (state.hasErrors) {
-    return res.status(401).json({ errors: state.errors });
+    return res.status(400).json({ errors: state.errors });
   }
 
   const {
@@ -133,7 +136,7 @@ module.exports.updateFeedback = function updateFeedback(req, res) {
 exports.deleteFeedback = function deleteFeedback(req, res) {
   const state = getValidationState(req);
   if (state.hasErrors) {
-    return res.status(401).json({ errors: state.errors });
+    return res.status(400).json({ errors: state.errors });
   }
 
   const { id } = req.params;
@@ -150,13 +153,13 @@ exports.deleteFeedback = function deleteFeedback(req, res) {
 exports.deleteManyFeedback = function deleteManyFeedback(req, res) {
   const state = getValidationState(req);
   if (state.hasErrors) {
-    return res.status(401).json({ errors: state.errors });
+    return res.status(400).json({ errors: state.errors });
   }
 
   const { ids } = req.body;
 
   Feedback.deleteMany({
-    id: { $in: ids },
+    _id: { $in: ids },
   }, (err) => {
     if (err) {
       return res.status(500);
@@ -179,37 +182,37 @@ exports.validate = (method) => {
     case exports.createFeedback.name: {
       return [
         check('title').optional(),
-        check('location').exists().isArray().isLength({ min: 2, max: 2 }),
+        check('location').exists().isArray(),
         check('author').exists().isString().not()
           .isEmpty(),
         check('address').exists().isString().not()
           .isEmpty(),
-        check('type').exists().isArray().isLength({ min: 1 }),
-        check('password').optional().isString().isLength({ min: 8 }),
+        check('type').exists().isArray(),
+        check('password').optional({ nullable: true }).isString().isLength({ min: 8 }),
         check('description').optional(),
       ];
     }
     case exports.approveFeedback.name: {
       return [
-        check('type').exists().isArray().isLength({ min: 1 }),
+        check('type').exists().isArray(),
         check('id').exists().isMongoId(),
-        check('location').exists().isArray().isLength({ min: 2, max: 2 }),
+        check('location').exists().isArray(),
         check('author').exists().isString(),
         check('address').exists().isString().not()
           .isEmpty(),
-        check('password').optional().isString().isLength({ min: 8 }),
+        check('password').optional({ nullable: true }).isString().isLength({ min: 8 }),
         check('description').optional(),
       ];
     }
     case exports.updateFeedback.name: {
       return [
         check('id').exists().isMongoId(),
-        check('location').exists().isArray().isLength({ min: 2, max: 2 }),
+        check('location').exists().isArray(),
         check('author').exists().isString().not()
           .isEmpty(),
         check('address').exists().isString().not()
           .isEmpty(),
-        check('type').exists().isArray().isLength({ min: 1 }),
+        check('type').exists().isArray(),
       ];
     }
     case exports.deleteFeedback.name: {
@@ -219,7 +222,7 @@ exports.validate = (method) => {
     }
     case exports.deleteManyFeedback.name: {
       return [
-        check('ids').exists().isArray().isLength({ min: 1 }),
+        check('ids').exists().isArray(),
       ];
     }
 
