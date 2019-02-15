@@ -6,7 +6,7 @@ const { convertPointToGeoJSONPoint } = require('../utils/geo');
 exports.getWifi = function getWifi(req, res) {
   const state = getValidationState(req);
   if (state.hasErrors) {
-    return res.status(401).json({ errors: state.errors });
+    return res.status(400).json({ errors: state.errors });
   }
 
   Wifi.find()
@@ -23,7 +23,7 @@ exports.getWifi = function getWifi(req, res) {
 exports.getWifiById = function getWifiById(req, res) {
   const state = getValidationState(req);
   if (state.hasErrors) {
-    return res.status(401).json({ errors: state.errors });
+    return res.status(400).json({ errors: state.errors });
   }
 
   const { id } = req.params;
@@ -40,7 +40,7 @@ exports.getWifiById = function getWifiById(req, res) {
 exports.createWifi = function createWifi(req, res) {
   const state = getValidationState(req);
   if (state.hasErrors) {
-    return res.status(401).json({ errors: state.errors });
+    return res.status(400).json({ errors: state.errors });
   }
 
   const {
@@ -71,7 +71,7 @@ exports.createWifi = function createWifi(req, res) {
 exports.updateWifi = function updateWifi(req, res) {
   const state = getValidationState(req);
   if (state.hasErrors) {
-    return res.status(401).json({ errors: state.errors });
+    return res.status(400).json({ errors: state.errors });
   }
 
   const {
@@ -105,7 +105,7 @@ exports.updateWifi = function updateWifi(req, res) {
 exports.deleteWifi = function deleteWifi(req, res) {
   const state = getValidationState(req);
   if (state.hasErrors) {
-    return res.status(401).json({ errors: state.errors });
+    return res.status(400).json({ errors: state.errors });
   }
 
   const { id } = req.params;
@@ -122,18 +122,19 @@ exports.deleteWifi = function deleteWifi(req, res) {
 exports.deleteManyWifi = function deleteManyWifi(req, res) {
   const state = getValidationState(req);
   if (state.hasErrors) {
-    return res.status(401).json({ errors: state.errors });
+    console.log('has errors');
+    console.log(state.errors);
+    return res.status(400).json({ errors: state.errors });
   }
 
   const { ids } = req.body;
 
   Wifi.deleteMany({
-    id: { $in: ids },
+    _id: { $in: ids },
   }, (err) => {
     if (err) {
       return res.status(500);
     }
-
     return res.status(204);
   });
 };
@@ -151,12 +152,12 @@ exports.validate = (method) => {
     case exports.createWifi.name: {
       return [
         check('title').exists(),
-        check('location').exists().isArray().isLength({ min: 2, max: 2 }),
+        check('location').exists().isArray(),
         check('author').optional().isString().not()
           .isEmpty(),
         check('address').exists().isString().not()
           .isEmpty(),
-        check('password').optional().isString().isLength({ min: 8 }),
+        check('password').optional({ nullable: true }).isString().isLength({ min: 8 }),
         check('description').optional().isString(),
       ];
     }
@@ -164,12 +165,12 @@ exports.validate = (method) => {
       return [
         check('id').exists().isMongoId(),
         check('title').exists(),
-        check('location').exists().isArray().isLength({ min: 2, max: 2 }),
+        check('location').exists().isArray(),
         check('author').optional().isString().not()
           .isEmpty(),
         check('address').exists().isString().not()
           .isEmpty(),
-        check('password').optional().isString().isLength({ min: 8 }),
+        check('password').optional({ nullable: true }).isString().isLength({ min: 8 }),
         check('description').optional().isString(),
       ];
     }
@@ -180,7 +181,7 @@ exports.validate = (method) => {
     }
     case exports.deleteManyWifi.name: {
       return [
-        check('ids').exists().isArray().isLength({ min: 1 }),
+        check('ids').exists().isArray(),
       ];
     }
 
