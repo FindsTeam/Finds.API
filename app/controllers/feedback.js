@@ -55,7 +55,7 @@ exports.createFeedback = function createFeedback(req, res) {
 
   Feedback.create({
     title,
-    location,
+    location: convertPointToGeoJSONPoint(location),
     author,
     address,
     type,
