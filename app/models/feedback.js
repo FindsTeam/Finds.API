@@ -1,7 +1,6 @@
-/* eslint-disable func-names */
-/* eslint-disable no-underscore-dangle */
 const mongoose = require('mongoose');
 const pointSchema = require('./point');
+const { toClient } = require('./utils');
 
 mongoose.Promise = Promise;
 
@@ -43,14 +42,7 @@ const feedback = new mongoose.Schema({
   versionKey: false,
 });
 
-feedback.method('toClient', function () {
-  const obj = this.toObject();
-
-  obj.id = obj._id;
-  delete obj._id;
-
-  return obj;
-});
+feedback.method('toClient', toClient);
 
 feedback.index({ loc: '2dsphere' });
 
