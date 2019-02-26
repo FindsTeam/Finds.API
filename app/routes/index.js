@@ -4,11 +4,13 @@ const router = express.Router();
 
 const wifiRoutes = require('./wifi');
 const toiletsRoutes = require('./toilets');
+const socketsRoutes = require('./sockets');
 const feedbackRoutes = require('./feedback');
 const markersRoutes = require('./markers');
 
 router.use('/wifi', wifiRoutes);
 router.use('/toilets', toiletsRoutes);
+router.use('/sockets', socketsRoutes);
 router.use('/feedback', feedbackRoutes);
 router.use('/markers', markersRoutes);
 
