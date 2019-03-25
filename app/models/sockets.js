@@ -4,16 +4,21 @@ const { toClient } = require('./utils');
 
 mongoose.Promise = Promise;
 
-const wifi = new mongoose.Schema({
+const sockets = new mongoose.Schema({
   title: {
     type: String,
-    required: true,
-    index: {
-      unique: false,
-    },
+    required: false,
   },
   location: {
     type: pointSchema,
+    required: true,
+  },
+  author: {
+    type: String,
+    required: true,
+  },
+  address: {
+    type: String,
     required: true,
   },
   description: {
@@ -25,23 +30,13 @@ const wifi = new mongoose.Schema({
     default: Date.now,
     required: true,
   },
-  author: {
-    type: String,
-    required: false,
-  },
-  address: {
-    type: String,
-    required: true,
-  },
-  password: {
-    type: String,
-    required: false,
-  },
 }, {
-  collection: 'wifi',
+  collection: 'sockets',
   versionKey: false,
 });
 
-wifi.method('toClient', toClient);
+sockets.method('toClient', toClient);
 
-module.exports = mongoose.model('wifi', wifi);
+sockets.index({ loc: '2dsphere' });
+
+module.exports = mongoose.model('sockets', sockets);

@@ -1,25 +1,25 @@
 const { check } = require('express-validator/check');
 const { getValidationState } = require('../utils/validationHelper');
-const Toilets = require('../models/toilets');
+const Sockets = require('../models/sockets');
 const { convertPointToGeoJSONPoint } = require('../utils/geo');
 
-exports.getToilets = function getToilets(req, res) {
+exports.getSockets = function getSockets(req, res) {
   const state = getValidationState(req);
   if (state.hasErrors) {
     return res.status(400).json({ errors: state.errors });
   }
 
-  Toilets.find()
+  Sockets.find()
     .limit(500)
-    .exec((err, toilets) => {
+    .exec((err, sockets) => {
       if (err) {
         return res.status(500);
       }
-      return res.status(200).json(toilets.map(t => t.toClient()));
+      return res.status(200).json(sockets.map(s => s.toClient()));
     });
 };
 
-exports.getToiletById = function getToiletById(req, res) {
+exports.getSocketById = function getSocketById(req, res) {
   const state = getValidationState(req);
   if (state.hasErrors) {
     return res.status(400).json({ errors: state.errors });
@@ -27,16 +27,16 @@ exports.getToiletById = function getToiletById(req, res) {
 
   const { id } = req.params;
 
-  Toilets.findById(id, (err, toilet) => {
+  Sockets.findById(id, (err, socket) => {
     if (err) {
       return res.status(500);
     }
 
-    return res.status(200).json(toilet.toClient());
+    return res.status(200).json(socket.toClient());
   });
 };
 
-exports.createToilet = function createToilet(req, res) {
+exports.createSocket = function createSocket(req, res) {
   const state = getValidationState(req);
   if (state.hasErrors) {
     return res.status(400).json({ errors: state.errors });
@@ -50,22 +50,22 @@ exports.createToilet = function createToilet(req, res) {
     address,
   } = req.body;
 
-  Toilets.create({
+  Sockets.create({
     title,
     location: convertPointToGeoJSONPoint(location),
     description,
     author,
     address,
-  }, (err, toilet) => {
+  }, (err, socket) => {
     if (err) {
       return res.status(500);
     }
 
-    return res.status(201).json(toilet.toClient());
+    return res.status(201).json(socket.toClient());
   });
 };
 
-exports.updateToilet = function updateToilet(req, res) {
+exports.updateSocket = function updateSocket(req, res) {
   const state = getValidationState(req);
   if (state.hasErrors) {
     return res.status(400).json({ errors: state.errors });
@@ -80,7 +80,7 @@ exports.updateToilet = function updateToilet(req, res) {
     address,
   } = req.body;
 
-  Toilets.findOneAndUpdate({ _id: id }, {
+  Sockets.findOneAndUpdate({ _id: id }, {
     title,
     location: convertPointToGeoJSONPoint(location),
     description,
@@ -88,16 +88,16 @@ exports.updateToilet = function updateToilet(req, res) {
     address,
   },
   { new: true },
-  (err, toilet) => {
+  (err, socket) => {
     if (err) {
       return res.status(500);
     }
 
-    return res.status(200).json(toilet.toClient());
+    return res.status(200).json(socket.toClient());
   });
 };
 
-exports.deleteToilet = function deleteToilet(req, res) {
+exports.deleteSocket = function deleteSocket(req, res) {
   const state = getValidationState(req);
   if (state.hasErrors) {
     return res.status(400).json({ errors: state.errors });
@@ -105,7 +105,7 @@ exports.deleteToilet = function deleteToilet(req, res) {
 
   const { id } = req.params;
 
-  Toilets.findByIdAndDelete(id, (err) => {
+  Sockets.findByIdAndDelete(id, (err) => {
     if (err) {
       return res.status(500);
     }
@@ -114,7 +114,7 @@ exports.deleteToilet = function deleteToilet(req, res) {
   });
 };
 
-exports.deleteToilets = function deleteToilets(req, res) {
+exports.deleteSockets = function deleteToilets(req, res) {
   const state = getValidationState(req);
   if (state.hasErrors) {
     return res.status(400).json({ errors: state.errors });
@@ -122,7 +122,7 @@ exports.deleteToilets = function deleteToilets(req, res) {
 
   const { ids } = req.body;
 
-  Toilets.deleteMany({
+  Sockets.deleteMany({
     _id: { $in: ids },
   }, (err) => {
     if (err) {
@@ -135,15 +135,15 @@ exports.deleteToilets = function deleteToilets(req, res) {
 
 exports.validate = (method) => {
   switch (method) {
-    case exports.getToilets.name: {
+    case exports.getSockets.name: {
       return [];
     }
-    case exports.getToiletById.name: {
+    case exports.getSocketById.name: {
       return [
         check('id').exists().isMongoId(),
       ];
     }
-    case exports.createToilet.name: {
+    case exports.createSocket.name: {
       return [
         check('title').optional(),
         check('location').exists().isArray(),
@@ -154,7 +154,7 @@ exports.validate = (method) => {
         check('description').optional().isString(),
       ];
     }
-    case exports.updateToilet.name: {
+    case exports.updateSocket.name: {
       return [
         check('id').exists().isMongoId(),
         check('title').optional(),
@@ -166,12 +166,12 @@ exports.validate = (method) => {
         check('description').optional().isString(),
       ];
     }
-    case exports.deleteToilet.name: {
+    case exports.deleteSocket.name: {
       return [
         check('id').exists().isMongoId(),
       ];
     }
-    case exports.deleteToilets.name: {
+    case exports.deleteSockets.name: {
       return [
         check('ids').exists().isArray(),
       ];

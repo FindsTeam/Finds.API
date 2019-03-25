@@ -4,7 +4,7 @@ const router = express.Router();
 
 const {
   createToilet,
-  deleteManyToilets,
+  deleteToilets,
   deleteToilet,
   getToiletById,
   getToilets,
@@ -23,6 +23,6 @@ router.put('/', validate(updateToilet.name), updateToilet);
 
 router.delete('/:id', validate(deleteToilet.name), deleteToilet);
 
-router.post('/delete', validate(deleteManyToilets.name), deleteManyToilets);
+router.post('/delete', validate(deleteToilets.name), deleteToilets);
 
 module.exports = router;

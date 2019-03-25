@@ -1,7 +1,6 @@
-/* eslint-disable func-names */
-/* eslint-disable no-underscore-dangle */
 const mongoose = require('mongoose');
 const pointSchema = require('./point');
+const { toClient } = require('./utils');
 
 mongoose.Promise = Promise;
 
@@ -39,13 +38,6 @@ const toilet = new mongoose.Schema({
   versionKey: false,
 });
 
-toilet.method('toClient', function () {
-  const obj = this.toObject();
-
-  obj.id = obj._id;
-  delete obj._id;
-
-  return obj;
-});
+toilet.method('toClient', toClient);
 
 module.exports = mongoose.model('toilets', toilet);
