@@ -81,7 +81,7 @@ exports.approveFeedback = function approveFeedback(req, res) {
 
   // eslint-disable-next-line no-restricted-globals
   if (isNaN(firstType)) {
-    return res.status(400);
+    return res.status(400).json();
   }
 
   const freebeeTypeWithModel = Object.values(freebeeTypesModels)
@@ -96,7 +96,7 @@ exports.approveFeedback = function approveFeedback(req, res) {
 
   marker.save((err, createdMarker) => {
     if (err) {
-      return res.status(500);
+      return res.status(500).json(err);
     }
 
     return res.status(201).json(createdMarker.toClient());
@@ -126,7 +126,7 @@ module.exports.updateFeedback = function updateFeedback(req, res) {
   { new: true },
   (err, feedback) => {
     if (err) {
-      return res.status(500);
+      return res.status(500).json(err);
     }
 
     return res.status(200).json(feedback.toClient());
@@ -143,10 +143,10 @@ exports.deleteFeedback = function deleteFeedback(req, res) {
 
   Feedback.findByIdAndDelete(id, (err) => {
     if (err) {
-      return res.status(500);
+      return res.status(500).json(err);
     }
 
-    return res.status(204);
+    return res.status(204).json();
   });
 };
 
@@ -162,10 +162,10 @@ exports.deleteManyFeedback = function deleteManyFeedback(req, res) {
     _id: { $in: ids },
   }, (err) => {
     if (err) {
-      return res.status(500);
+      return res.status(500).json(err);
     }
 
-    return res.status(204);
+    return res.status(204).json();
   });
 };
 

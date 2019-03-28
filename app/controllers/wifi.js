@@ -13,7 +13,7 @@ exports.getWifi = function getWifi(req, res) {
     .limit(500)
     .exec((err, wifi) => {
       if (err) {
-        return res.status(500);
+        return res.status(500).json(err);
       }
 
       return res.status(200).json(wifi.map(w => w.toClient()));
@@ -30,7 +30,7 @@ exports.getWifiById = function getWifiById(req, res) {
 
   Wifi.findById(id, (err, wifi) => {
     if (err) {
-      return res.status(500);
+      return res.status(500).json(err);
     }
 
     return res.status(200).json(wifi.toClient());
@@ -61,7 +61,7 @@ exports.createWifi = function createWifi(req, res) {
     password,
   }, (err, createdWifi) => {
     if (err) {
-      return res.status(500);
+      return res.status(500).json(err);
     }
 
     return res.status(201).json(createdWifi.toClient());
@@ -95,7 +95,7 @@ exports.updateWifi = function updateWifi(req, res) {
   { new: true },
   (err, wifi) => {
     if (err) {
-      return res.status(500);
+      return res.status(500).json(err);
     }
 
     return res.status(200).json(wifi.toClient());
@@ -112,18 +112,16 @@ exports.deleteWifi = function deleteWifi(req, res) {
 
   Wifi.findByIdAndDelete(id, (err) => {
     if (err) {
-      return res.status(500);
+      return res.status(500).json(err);
     }
 
-    return res.status(204);
+    return res.status(204).json();
   });
 };
 
 exports.deleteManyWifi = function deleteManyWifi(req, res) {
   const state = getValidationState(req);
   if (state.hasErrors) {
-    console.log('has errors');
-    console.log(state.errors);
     return res.status(400).json({ errors: state.errors });
   }
 
@@ -133,9 +131,9 @@ exports.deleteManyWifi = function deleteManyWifi(req, res) {
     _id: { $in: ids },
   }, (err) => {
     if (err) {
-      return res.status(500);
+      return res.status(500).json(err);
     }
-    return res.status(204);
+    return res.status(204).json();
   });
 };
 
