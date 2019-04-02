@@ -13,7 +13,7 @@ exports.getToilets = function getToilets(req, res) {
     .limit(500)
     .exec((err, toilets) => {
       if (err) {
-        return res.status(500);
+        return res.status(500).json(err);
       }
       return res.status(200).json(toilets.map(t => t.toClient()));
     });
@@ -29,7 +29,7 @@ exports.getToiletById = function getToiletById(req, res) {
 
   Toilets.findById(id, (err, toilet) => {
     if (err) {
-      return res.status(500);
+      return res.status(500).json(err);
     }
 
     return res.status(200).json(toilet.toClient());
@@ -58,7 +58,7 @@ exports.createToilet = function createToilet(req, res) {
     address,
   }, (err, toilet) => {
     if (err) {
-      return res.status(500);
+      return res.status(500).json(err);
     }
 
     return res.status(201).json(toilet.toClient());
@@ -90,7 +90,7 @@ exports.updateToilet = function updateToilet(req, res) {
   { new: true },
   (err, toilet) => {
     if (err) {
-      return res.status(500);
+      return res.status(500).json(err);
     }
 
     return res.status(200).json(toilet.toClient());
@@ -107,10 +107,10 @@ exports.deleteToilet = function deleteToilet(req, res) {
 
   Toilets.findByIdAndDelete(id, (err) => {
     if (err) {
-      return res.status(500);
+      return res.status(500).json(err);
     }
 
-    return res.status(204);
+    return res.status(204).json();
   });
 };
 
@@ -126,10 +126,10 @@ exports.deleteToilets = function deleteToilets(req, res) {
     _id: { $in: ids },
   }, (err) => {
     if (err) {
-      return res.status(500);
+      return res.status(500).json(err);
     }
 
-    return res.status(204);
+    return res.status(204).json();
   });
 };
 
