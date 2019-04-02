@@ -77,15 +77,9 @@ exports.approveFeedback = function approveFeedback(req, res) {
   }
 
   const { type } = req.body;
-  const firstType = parseInt(type[0], 10);
-
-  // eslint-disable-next-line no-restricted-globals
-  if (isNaN(firstType)) {
-    return res.status(400).json();
-  }
 
   const freebeeTypeWithModel = Object.values(freebeeTypesModels)
-    .find(typeModel => typeModel.type === firstType);
+    .find(typeModel => typeModel.type.toString() === type[0]);
 
   const MarkerModel = freebeeTypeWithModel.model;
 
@@ -99,7 +93,14 @@ exports.approveFeedback = function approveFeedback(req, res) {
       return res.status(500).json(err);
     }
 
-    return res.status(201).json(createdMarker.toClient());
+    const { id } = req.body;
+    Feedback.findByIdAndDelete(id, (deleteError) => {
+      if (err) {
+        return res.status(500).json(deleteError);
+      }
+
+      return res.status(201).json(createdMarker.toClient());
+    });
   });
 };
 
@@ -194,7 +195,7 @@ exports.validate = (method) => {
     }
     case exports.approveFeedback.name: {
       return [
-        check('type').exists().isArray(),
+        check('type').exists().isNumeric(),
         check('id').exists().isMongoId(),
         check('location').exists().isArray(),
         check('author').exists().isString(),
