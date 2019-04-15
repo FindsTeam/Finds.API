@@ -1,10 +1,12 @@
 const http = require('./http');
-const { locationEndpoints } = require('../endpoints');
+const { getAddressFromCoordinatesFormatter } = require('../utils/geo');
 
+const baseApi = 'https://nominatim.openstreetmap.org';
 const format = 'geojson';
 
+const reverseGeocodingEndpoint = `${baseApi}/reverse`;
 module.exports.reverseGeocoding = async (lat, lng) => {
-  const { data } = await http.get(locationEndpoints.reverse, {
+  const { data } = await http.get(reverseGeocodingEndpoint, {
     params: {
       format,
       lat,
@@ -12,5 +14,10 @@ module.exports.reverseGeocoding = async (lat, lng) => {
     },
   });
 
-  return data;
+  const formattedAddress = getAddressFromCoordinatesFormatter(data);
+
+  return formattedAddress;
 };
+
+const geocodingEndpoint = `${baseApi}/search`;
+module.exports.geocode = async address => null;

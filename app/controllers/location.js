@@ -7,6 +7,8 @@ exports.getRoute = function getRoute(req, res) {
   if (state.hasErrors) {
     return res.status(400).json({ errors: state.errors });
   }
+
+  return res.status(501).json({});
 };
 
 exports.geocoding = function geocoding(req, res) {
@@ -14,6 +16,8 @@ exports.geocoding = function geocoding(req, res) {
   if (state.hasErrors) {
     return res.status(400).json({ errors: state.errors });
   }
+
+  return res.status(501).json({});
 };
 
 exports.reverseGeocoding = async function reverseGeocoding(req, res) {
@@ -25,9 +29,13 @@ exports.reverseGeocoding = async function reverseGeocoding(req, res) {
   const { lat, lng } = req.params;
 
   try {
-    const result = await locationService.reverseGeocoding(lat, lng);
+    const geocodingResult = await locationService.reverseGeocoding(lat, lng);
 
-    return res.status(200).json(result);
+    if (!geocodingResult) {
+      return res.status(404).json(geocodingResult);
+    }
+
+    return res.status(200).json(geocodingResult);
   } catch (error) {
     console.error(error);
 
