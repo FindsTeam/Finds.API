@@ -41,10 +41,16 @@ $ npm install
 To launch Freebee API you should create `.env` file in a root directory. File should contain:
 
 ```
-PORT = 3000
-MONGODB_CONNECTION =  
-AUTH0_DOMAIN = 
-AUTH0_API_IDENTIFIER = 
+PORT = 4000
+MONGODB_CONNECTION =
+MONGO_DB_NAME =
+
+HERE_ROUTE_API =
+HERE_APP_ID =
+HERE_APP_CODE =
+
+AUTH0_DOMAIN =
+AUTH0_API_IDENTIFIER =
 ```
 
 * `MONGODB_CONNECTION` - a MongoDB [connection string](https://docs.mongodb.com/manual/reference/connection-string/) with credentials;
