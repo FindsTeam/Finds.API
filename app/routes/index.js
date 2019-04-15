@@ -8,6 +8,7 @@ const socketsRoutes = require('./sockets');
 const feedbackRoutes = require('./feedback');
 const markersRoutes = require('./markers');
 const locationRoutes = require('./location');
+const routingRoutes = require('./routing');
 
 router.use('/wifi', wifiRoutes);
 router.use('/toilets', toiletsRoutes);
@@ -15,5 +16,6 @@ router.use('/sockets', socketsRoutes);
 router.use('/feedback', feedbackRoutes);
 router.use('/markers', markersRoutes);
 router.use('/location', locationRoutes);
+router.use('/route', routingRoutes);
 
 module.exports = router;

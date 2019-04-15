@@ -2,15 +2,6 @@ const { check } = require('express-validator/check');
 const { getValidationState } = require('../utils/validationHelper');
 const locationService = require('../services/location');
 
-exports.getRoute = function getRoute(req, res) {
-  const state = getValidationState(req);
-  if (state.hasErrors) {
-    return res.status(400).json({ errors: state.errors });
-  }
-
-  return res.status(501).json({});
-};
-
 exports.geocoding = function geocoding(req, res) {
   const state = getValidationState(req);
   if (state.hasErrors) {
@@ -45,9 +36,6 @@ exports.reverseGeocoding = async function reverseGeocoding(req, res) {
 
 exports.validate = (method) => {
   switch (method) {
-    case exports.getRoute.name: {
-      return [];
-    }
     case exports.geocoding.name: {
       return [];
     }
