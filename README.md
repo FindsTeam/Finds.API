@@ -51,6 +51,7 @@ HERE_APP_CODE =
 
 AUTH0_DOMAIN =
 AUTH0_API_IDENTIFIER =
+AUTH0_CLIENT_ID =
 ```
 
 * `MONGODB_CONNECTION` - a MongoDB [connection string](https://docs.mongodb.com/manual/reference/connection-string/) with credentials;

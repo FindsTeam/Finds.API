@@ -1,4 +1,5 @@
 const express = require('express');
+const { validateAuthToken } = require('../../services/auth');
 
 const router = express.Router();
 
@@ -14,18 +15,18 @@ const {
   validate,
 } = require('../../controllers/feedback');
 
-router.get('/', validate(getFeedback.name), getFeedback);
+router.get('/', validateAuthToken, validate(getFeedback.name), getFeedback);
 
-router.get('/:id', validate(getFeedbackById.name), getFeedbackById);
+router.get('/:id', validateAuthToken, validate(getFeedbackById.name), getFeedbackById);
 
 router.post('/', validate(createFeedback.name), createFeedback);
 
-router.post('/approve', validate(approveFeedback.name), approveFeedback);
+router.post('/approve', validateAuthToken, validate(approveFeedback.name), approveFeedback);
 
-router.put('/', validate(updateFeedback.name), updateFeedback);
+router.put('/', validateAuthToken, validate(updateFeedback.name), updateFeedback);
 
-router.delete('/:id', validate(deleteFeedback.name), deleteFeedback);
+router.delete('/:id', validateAuthToken, validate(deleteFeedback.name), deleteFeedback);
 
-router.post('/delete', validate(deleteManyFeedback.name), deleteManyFeedback);
+router.post('/delete', validateAuthToken, validate(deleteManyFeedback.name), deleteManyFeedback);
 
 module.exports = router;
