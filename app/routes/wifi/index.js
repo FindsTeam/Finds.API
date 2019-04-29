@@ -1,4 +1,5 @@
 const express = require('express');
+const { validateAuthToken } = require('../../services/auth');
 
 const router = express.Router();
 
@@ -17,12 +18,12 @@ router.get('/', validate(getWifi.name), getWifi);
 
 router.get('/:id', validate(getWifiById.name), getWifiById);
 
-router.post('/', validate(createWifi.name), createWifi);
+router.post('/', validateAuthToken, validate(createWifi.name), createWifi);
 
-router.put('/', validate(updateWifi.name), updateWifi);
+router.put('/', validateAuthToken, validate(updateWifi.name), updateWifi);
 
-router.delete('/:id', validate(deleteWifi.name), deleteWifi);
+router.delete('/:id', validateAuthToken, validate(deleteWifi.name), deleteWifi);
 
-router.post('/delete', validate(deleteManyWifi.name), deleteManyWifi);
+router.post('/delete', validateAuthToken, validate(deleteManyWifi.name), deleteManyWifi);
 
 module.exports = router;

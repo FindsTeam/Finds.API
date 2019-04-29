@@ -1,4 +1,5 @@
 const express = require('express');
+const { validateAuthToken } = require('../../services/auth');
 
 const router = express.Router();
 
@@ -17,12 +18,12 @@ router.get('/', validate(getToilets.name), getToilets);
 
 router.get('/:id', validate(getToiletById.name), getToiletById);
 
-router.post('/', validate(createToilet.name), createToilet);
+router.post('/', validateAuthToken, validate(createToilet.name), createToilet);
 
-router.put('/', validate(updateToilet.name), updateToilet);
+router.put('/', validateAuthToken, validate(updateToilet.name), updateToilet);
 
-router.delete('/:id', validate(deleteToilet.name), deleteToilet);
+router.delete('/:id', validateAuthToken, validate(deleteToilet.name), deleteToilet);
 
-router.post('/delete', validate(deleteToilets.name), deleteToilets);
+router.post('/delete', validateAuthToken, validate(deleteToilets.name), deleteToilets);
 
 module.exports = router;
