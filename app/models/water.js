@@ -38,6 +38,8 @@ const water = new mongoose.Schema({
   versionKey: false,
 });
 
+water.index({ location: '2dsphere' });
+
 water.method('toClient', toClient);
 
 module.exports = mongoose.model('water', water);

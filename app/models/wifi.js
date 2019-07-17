@@ -42,6 +42,8 @@ const wifi = new mongoose.Schema({
   versionKey: false,
 });
 
+wifi.index({ location: '2dsphere' });
+
 wifi.method('toClient', toClient);
 
 module.exports = mongoose.model('wifi', wifi);
