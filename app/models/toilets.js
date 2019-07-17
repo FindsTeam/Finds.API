@@ -38,6 +38,8 @@ const toilet = new mongoose.Schema({
   versionKey: false,
 });
 
+toilet.index({ location: '2dsphere' });
+
 toilet.method('toClient', toClient);
 
 module.exports = mongoose.model('toilets', toilet);
