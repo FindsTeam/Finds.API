@@ -4,10 +4,10 @@ const { toClient } = require('./utils');
 
 mongoose.Promise = Promise;
 
-const wifi = new mongoose.Schema({
+const water = new mongoose.Schema({
   title: {
     type: String,
-    required: true,
+    required: false,
     index: {
       unique: false,
     },
@@ -33,17 +33,13 @@ const wifi = new mongoose.Schema({
     type: String,
     required: true,
   },
-  password: {
-    type: String,
-    required: false,
-  },
 }, {
-  collection: 'wifi',
+  collection: 'water',
   versionKey: false,
 });
 
-wifi.index({ location: '2dsphere' });
+water.index({ location: '2dsphere' });
 
-wifi.method('toClient', toClient);
+water.method('toClient', toClient);
 
-module.exports = mongoose.model('wifi', wifi);
+module.exports = mongoose.model('water', water);

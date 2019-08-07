@@ -37,6 +37,6 @@ const sockets = new mongoose.Schema({
 
 sockets.method('toClient', toClient);
 
-sockets.index({ loc: '2dsphere' });
+sockets.index({ location: '2dsphere' });
 
 module.exports = mongoose.model('sockets', sockets);

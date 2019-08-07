@@ -13,7 +13,7 @@ exports.getSockets = function getSockets(req, res) {
     .limit(500)
     .exec((err, sockets) => {
       if (err) {
-        return res.status(500);
+        return res.status(500).json(err);
       }
       return res.status(200).json(sockets.map(s => s.toClient()));
     });
@@ -29,7 +29,7 @@ exports.getSocketById = function getSocketById(req, res) {
 
   Sockets.findById(id, (err, socket) => {
     if (err) {
-      return res.status(500);
+      return res.status(500).json(err);
     }
 
     return res.status(200).json(socket.toClient());
@@ -58,7 +58,7 @@ exports.createSocket = function createSocket(req, res) {
     address,
   }, (err, socket) => {
     if (err) {
-      return res.status(500);
+      return res.status(500).json(err);
     }
 
     return res.status(201).json(socket.toClient());
@@ -90,7 +90,7 @@ exports.updateSocket = function updateSocket(req, res) {
   { new: true },
   (err, socket) => {
     if (err) {
-      return res.status(500);
+      return res.status(500).json(err);
     }
 
     return res.status(200).json(socket.toClient());
@@ -107,14 +107,14 @@ exports.deleteSocket = function deleteSocket(req, res) {
 
   Sockets.findByIdAndDelete(id, (err) => {
     if (err) {
-      return res.status(500);
+      return res.status(500).json(err);
     }
 
-    return res.status(204);
+    return res.status(204).json();
   });
 };
 
-exports.deleteSockets = function deleteToilets(req, res) {
+exports.deleteSockets = function deleteSockets(req, res) {
   const state = getValidationState(req);
   if (state.hasErrors) {
     return res.status(400).json({ errors: state.errors });
@@ -126,10 +126,10 @@ exports.deleteSockets = function deleteToilets(req, res) {
     _id: { $in: ids },
   }, (err) => {
     if (err) {
-      return res.status(500);
+      return res.status(500).json(err);
     }
 
-    return res.status(204);
+    return res.status(204).json();
   });
 };
 

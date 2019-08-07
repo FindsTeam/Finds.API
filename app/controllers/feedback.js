@@ -77,15 +77,9 @@ exports.approveFeedback = function approveFeedback(req, res) {
   }
 
   const { type } = req.body;
-  const firstType = parseInt(type[0], 10);
-
-  // eslint-disable-next-line no-restricted-globals
-  if (isNaN(firstType)) {
-    return res.status(400);
-  }
 
   const freebeeTypeWithModel = Object.values(freebeeTypesModels)
-    .find(typeModel => typeModel.type === firstType);
+    .find(typeModel => typeModel.type.toString() === type[0]);
 
   const MarkerModel = freebeeTypeWithModel.model;
 
@@ -96,10 +90,17 @@ exports.approveFeedback = function approveFeedback(req, res) {
 
   marker.save((err, createdMarker) => {
     if (err) {
-      return res.status(500);
+      return res.status(500).json(err);
     }
 
-    return res.status(201).json(createdMarker.toClient());
+    const { id } = req.body;
+    Feedback.findByIdAndDelete(id, (deleteError) => {
+      if (err) {
+        return res.status(500).json(deleteError);
+      }
+
+      return res.status(201).json(createdMarker.toClient());
+    });
   });
 };
 
@@ -126,7 +127,7 @@ module.exports.updateFeedback = function updateFeedback(req, res) {
   { new: true },
   (err, feedback) => {
     if (err) {
-      return res.status(500);
+      return res.status(500).json(err);
     }
 
     return res.status(200).json(feedback.toClient());
@@ -143,10 +144,10 @@ exports.deleteFeedback = function deleteFeedback(req, res) {
 
   Feedback.findByIdAndDelete(id, (err) => {
     if (err) {
-      return res.status(500);
+      return res.status(500).json(err);
     }
 
-    return res.status(204);
+    return res.status(204).json();
   });
 };
 
@@ -162,10 +163,10 @@ exports.deleteManyFeedback = function deleteManyFeedback(req, res) {
     _id: { $in: ids },
   }, (err) => {
     if (err) {
-      return res.status(500);
+      return res.status(500).json(err);
     }
 
-    return res.status(204);
+    return res.status(204).json();
   });
 };
 
@@ -194,7 +195,7 @@ exports.validate = (method) => {
     }
     case exports.approveFeedback.name: {
       return [
-        check('type').exists().isArray(),
+        check('type').exists().isNumeric(),
         check('id').exists().isMongoId(),
         check('location').exists().isArray(),
         check('author').exists().isString(),
