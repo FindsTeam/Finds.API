@@ -1,7 +1,7 @@
 {
-    "name": "freebee-api",
+    "name": "finds-api",
     "version": "1.0.0",
-    "description": "",
+    "description": "Api for Finds.Web and Finds.Admin projects",
     "main": "app.js",
     "engines": {
         "node": ">=10.15.0"
@@ -12,14 +12,14 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/FreebeeTeam/freebee-api.git"
+        "url": "git+https://github.com/FindsTeam/Finds.API.git"
     },
     "author": "",
     "license": "ISC",
     "bugs": {
-        "url": "https://github.com/FreebeeTeam/freebee-api/issues"
+        "url": "https://github.com/FindsTeam/Finds.API/issues"
     },
-    "homepage": "https://github.com/FreebeeTeam/freebee-api#readme",
+    "homepage": "https://github.com/FindsTeam/Finds.API#readme",
     "dependencies": {
         "axios": "^0.18.0",
         "body-parser": "^1.18.3",
