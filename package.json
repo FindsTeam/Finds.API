@@ -31,7 +31,7 @@
         "helmet": "^3.16.0",
         "jwks-rsa": "^1.4.0",
         "mongodb": "^3.2.3",
-        "mongoose": "^5.5.1"
+        "mongoose": "^5.7.5"
     },
     "devDependencies": {
         "eslint": "^5.16.0",
